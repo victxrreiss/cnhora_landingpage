@@ -149,6 +149,14 @@ const Hero = () => {
   const progressRef = useRef(null);
   const indicatorRef = useRef(null);
 
+  const goToCards = (tab) => {
+    setActiveTab(tab);
+    const heroTop = heroRef.current
+      ? heroRef.current.getBoundingClientRect().top + window.scrollY
+      : 0;
+    window.scrollTo({ top: heroTop + window.innerHeight * 2.8, behavior: 'smooth' });
+  };
+
   /* ─── Three.js particles ─── */
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -544,18 +552,24 @@ const Hero = () => {
 
           {/* CTAs */}
           <div className="btn-cta-group">
-            <a href="#cta" className="btn-primary">
-              Sou Aluno — Começar grátis
+            <a href="#cta" className="btn-primary" onClick={(e) => { e.preventDefault(); goToCards('aluno'); }}>
+              Sou Aluno
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </a>
-            <a href="#instrutores" className="btn-secondary">
+            <a href="#instrutores" className="btn-secondary" onClick={(e) => { e.preventDefault(); goToCards('instrutor'); }}>
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               Sou Instrutor
             </a>
+            <button className="btn-download">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Baixar App
+            </button>
           </div>
 
           {/* Trust badges */}

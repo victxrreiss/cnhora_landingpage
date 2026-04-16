@@ -465,6 +465,7 @@ body {
 .btn-cta-group {
   display: flex;
   gap: 1.25rem;
+  pointer-events: auto;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
@@ -533,6 +534,31 @@ body {
 .btn-secondary:hover {
   background: rgba(255,255,255,0.12);
   border-color: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.6rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(200, 220, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.btn-download:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: rgba(220, 235, 255, 0.95);
   transform: translateY(-2px);
 }
 

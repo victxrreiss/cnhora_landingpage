@@ -514,6 +514,50 @@ body {
   box-shadow: 0 16px 40px rgba(255,107,0,0.5), 0 0 0 1px rgba(255,140,0,0.4);
 }
 
+.btn-nav-primary {
+  position: relative;
+  padding: 0.55rem 1.4rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: white;
+  background: linear-gradient(135deg, #FF8C00 0%, #FF4500 100%);
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(255,107,0,0.35), 0 0 0 1px rgba(255,140,0,0.25);
+}
+
+.btn-nav-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn-nav-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%; height: 200%;
+  background: rgba(255,255,255,0.2);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+
+.btn-nav-primary:hover::after { left: 120%; }
+
+.btn-nav-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,107,0,0.5), 0 0 0 1px rgba(255,140,0,0.4);
+}
+
 .btn-secondary {
   padding: 1rem 2.2rem;
   border-radius: 1rem;

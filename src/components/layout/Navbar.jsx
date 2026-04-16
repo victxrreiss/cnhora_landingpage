@@ -66,13 +66,8 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            whileHover={{ translateY: -1 }}
             whileTap={{ scale: 0.97 }}
-            className="text-sm font-bold text-white px-5 py-2 rounded-xl transition-all duration-200"
-            style={{
-              background: 'linear-gradient(135deg, #FF8C00, #FF4500)',
-              boxShadow: '0 4px 15px rgba(255,107,0,0.3)',
-            }}
+            className="btn-nav-primary"
           >
             Começar grátis
           </motion.a>
@@ -111,8 +106,7 @@ const Navbar = () => {
               ))}
               <a
                 href="#cta"
-                className="text-white font-bold px-6 py-3.5 rounded-xl text-center"
-                style={{ background: 'linear-gradient(135deg, #FF8C00, #FF4500)' }}
+                className="btn-nav-primary justify-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Começar grátis

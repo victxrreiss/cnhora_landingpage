@@ -674,3 +674,161 @@ body {
   .ring-2, .ring-3 { display: none; }
   .hero-feature-card { padding: 1.5rem; }
 }
+
+/* ===== APP SHOWCASE SECTION ===== */
+.showcase-section {
+  min-height: 100vh;
+  background: #000810;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.showcase-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.showcase-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.showcase-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.showcase-layout {
+  display: flex;
+  align-items: center;
+  gap: 6rem;
+}
+
+/* ── Phone Mockup ── */
+.phone-mockup {
+  width: 280px;
+  height: 560px;
+  background: #1a1a2e;
+  border-radius: 40px;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 60px rgba(255, 107, 0, 0.08);
+}
+
+.phone-notch {
+  width: 80px;
+  height: 24px;
+  background: #000;
+  border-radius: 0 0 12px 12px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.phone-screen-area {
+  position: absolute;
+  top: 36px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.phone-screen-item {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.phone-screen-item .screen-icon {
+  width: 48px;
+  height: 48px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.phone-screen-item .screen-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Text Panel ── */
+.showcase-text-panel {
+  width: 440px;
+  position: relative;
+}
+
+.showcase-topic-items {
+  position: relative;
+  height: 220px;
+}
+
+.showcase-topic-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.showcase-topic-item h3 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.showcase-topic-item h3 .highlight {
+  color: #FF6B00;
+}
+
+.showcase-topic-item p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+}
+
+.showcase-dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 2.5rem;
+}
+
+.showcase-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.3s ease;
+}
+
+.showcase-dot.active {
+  background: #FF6B00;
+}

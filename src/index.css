@@ -676,77 +676,125 @@ body {
 }
 
 /* ===== APP SHOWCASE SECTION ===== */
-.showcase-section {
-  min-height: 100vh;
-  background: #000810;
+
+/* Outer scroll container — gives 300% scroll space */
+.showcase-outer {
+  height: 400vh;
+}
+
+/* Sticky inner — stays fixed while user scrolls through outer */
+.showcase-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 5rem 4rem;
-  position: relative;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%);
+}
+
+/* ── Background glows ── */
+.showcase-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   overflow: hidden;
 }
 
+.showcase-glow-orange {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.18) 0%, transparent 70%);
+  top: -10%;
+  right: 5%;
+  animation: showcaseGlow 5s ease-in-out infinite alternate;
+}
+
+.showcase-glow-blue {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 100, 255, 0.14) 0%, transparent 70%);
+  bottom: -15%;
+  left: -5%;
+  animation: showcaseGlow 7s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes showcaseGlow {
+  from { transform: scale(0.85); opacity: 0.5; }
+  to   { transform: scale(1.15); opacity: 1; }
+}
+
+/* ── Header ── */
 .showcase-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
 }
 
 .showcase-header h2 {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
   color: #fff;
-  margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.showcase-header h2 .highlight,
+.showcase-topic-item h3 .highlight {
+  color: #FF6B00;
 }
 
 .showcase-header p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: rgba(255, 255, 255, 0.6);
-  max-width: 520px;
-  margin: 0 auto;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
+/* ── Layout row ── */
 .showcase-layout {
   display: flex;
   align-items: center;
-  gap: 6rem;
+  gap: 5rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* ── Phone Mockup ── */
+/* ── Phone mockup ── */
 .phone-mockup {
   width: 280px;
   height: 560px;
   background: #1a1a2e;
   border-radius: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 18px;
   position: relative;
   flex-shrink: 0;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 30px 80px rgba(0, 0, 0, 0.6),
-    0 0 60px rgba(255, 107, 0, 0.08);
+  box-shadow: 0 0 60px rgba(0, 100, 255, 0.1), 0 0 30px rgba(255, 107, 0, 0.05);
 }
 
 .phone-notch {
   width: 80px;
   height: 24px;
   background: #000;
-  border-radius: 0 0 12px 12px;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .phone-screen-area {
-  position: absolute;
-  top: 36px;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  position: relative;
+  width: calc(100% - 24px);
+  flex: 1;
   border-radius: 28px;
   overflow: hidden;
 }
@@ -805,16 +853,13 @@ body {
   letter-spacing: -0.02em;
 }
 
-.showcase-topic-item h3 .highlight {
-  color: #FF6B00;
-}
-
 .showcase-topic-item p {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.7;
 }
 
+/* ── Progress dots ── */
 .showcase-dots {
   display: flex;
   gap: 10px;

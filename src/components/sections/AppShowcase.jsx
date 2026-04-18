@@ -1,8 +1,6 @@
-// src/components/sections/AppShowcase.jsx
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { createPinnedTimeline } from '../../utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,29 +29,16 @@ const TOPICS = [
 ];
 
 const AppShowcase = () => {
-  const sectionRef = useRef(null);
+  const outerRef = useRef(null);
   const screenRefs = useRef([]);
   const textRefs = useRef([]);
   const dotRefs = useRef([]);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    const outer = outerRef.current;
+    if (!outer) return;
 
-    // ── Entry animation (before pin) ──
-    const entryAnim = gsap.from(section, {
-      y: 80,
-      opacity: 0,
-      duration: 1,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 85%',
-        once: true,
-      },
-    });
-
-    // ── Initial states ──
+    // Initial states — topic 0 visible, rest hidden
     textRefs.current.forEach((el, i) => {
       if (!el) return;
       gsap.set(el, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 50 });
@@ -63,16 +48,20 @@ const AppShowcase = () => {
       gsap.set(el, { opacity: i === 0 ? 1 : 0 });
     });
 
-    // ── Pinned timeline ──
-    const tl = createPinnedTimeline({
-      trigger: section,
-      end: '+=300%',
-      onUpdate: (self) => {
-        const idx = Math.min(Math.floor(self.progress * 3), 2);
-        dotRefs.current.forEach((dot, i) => {
-          if (!dot) return;
-          dot.classList.toggle('active', i === idx);
-        });
+    // ScrollTrigger — no pin: true (CSS sticky handles it)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: outer,
+        start: 'top top',
+        end: '+=300%',
+        scrub: 1.2,
+        onUpdate: (self) => {
+          const idx = Math.min(Math.floor(self.progress * 3), 2);
+          dotRefs.current.forEach((dot, i) => {
+            if (!dot) return;
+            dot.classList.toggle('active', i === idx);
+          });
+        },
       },
     });
 
@@ -88,74 +77,85 @@ const AppShowcase = () => {
     tl.to(screenRefs.current[2], { opacity: 1, duration: 1.5, ease: 'power1.inOut' }, 6.5);
     tl.fromTo(textRefs.current[2], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 2, ease: 'power2.out' }, 7);
 
-    // ensure timeline duration reaches 9
+    // Pad timeline to 9
     tl.to({}, { duration: 1 }, 8);
 
     return () => {
       tl.kill();
-      entryAnim.scrollTrigger?.kill();
     };
   }, []);
 
   return (
-    <section ref={sectionRef} className="showcase-section">
-      <div className="showcase-header">
-        <h2>O app que <span style={{ color: '#FF6B00' }}>trabalha</span> por você</h2>
-        <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
-      </div>
+    <div ref={outerRef} className="showcase-outer">
+      <div className="showcase-sticky">
 
-      <div className="showcase-layout">
-        {/* Phone mockup */}
-        <div className="phone-mockup">
-          <div className="phone-notch" />
-          <div className="phone-screen-area">
-            {TOPICS.map((topic, i) => (
-              <div
-                key={i}
-                ref={el => screenRefs.current[i] = el}
-                className="phone-screen-item"
-                style={{ background: topic.gradient }}
-              >
-                <svg className="screen-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={topic.screenIcon} />
-                </svg>
-                <span className="screen-label">{topic.screenLabel}</span>
-              </div>
-            ))}
+        {/* Animated background */}
+        <div className="showcase-bg">
+          <div className="showcase-glow-orange" />
+          <div className="showcase-glow-blue" />
+        </div>
+
+        {/* Header */}
+        <div className="showcase-header">
+          <h2>O app que <span className="highlight">trabalha</span> por você</h2>
+          <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
+        </div>
+
+        {/* Layout */}
+        <div className="showcase-layout">
+          {/* Phone mockup */}
+          <div className="phone-mockup">
+            <div className="phone-notch" />
+            <div className="phone-screen-area">
+              {TOPICS.map((topic, i) => (
+                <div
+                  key={i}
+                  ref={el => screenRefs.current[i] = el}
+                  className="phone-screen-item"
+                  style={{ background: topic.gradient }}
+                >
+                  <svg className="screen-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={topic.screenIcon} />
+                  </svg>
+                  <span className="screen-label">{topic.screenLabel}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Text panel */}
+          <div className="showcase-text-panel">
+            <div className="showcase-topic-items">
+              {TOPICS.map((topic, i) => (
+                <div
+                  key={i}
+                  ref={el => textRefs.current[i] = el}
+                  className="showcase-topic-item"
+                >
+                  <h3>
+                    {topic.titleParts[0]}
+                    <span className="highlight">{topic.titleParts[1]}</span>
+                    {topic.titleParts[2]}
+                  </h3>
+                  <p>{topic.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="showcase-dots">
+              {TOPICS.map((_, i) => (
+                <span
+                  key={i}
+                  ref={el => dotRefs.current[i] = el}
+                  className={`showcase-dot${i === 0 ? ' active' : ''}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Text panel */}
-        <div className="showcase-text-panel">
-          <div className="showcase-topic-items">
-            {TOPICS.map((topic, i) => (
-              <div
-                key={i}
-                ref={el => textRefs.current[i] = el}
-                className="showcase-topic-item"
-              >
-                <h3>
-                  {topic.titleParts[0]}
-                  <span className="highlight">{topic.titleParts[1]}</span>
-                  {topic.titleParts[2]}
-                </h3>
-                <p>{topic.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="showcase-dots">
-            {TOPICS.map((_, i) => (
-              <span
-                key={i}
-                ref={el => dotRefs.current[i] = el}
-                className={`showcase-dot${i === 0 ? ' active' : ''}`}
-              />
-            ))}
-          </div>
-        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

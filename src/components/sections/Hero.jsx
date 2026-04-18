@@ -34,6 +34,30 @@ const HeroFallback = () => (
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SHOWCASE_TOPICS = [
+  {
+    titleParts: ['Tenha a área da sua aula no ', 'mapa', ''],
+    desc: 'O instrutor define previamente o local da aula. O aluno chega sabendo exatamente onde vai ser.',
+    gradient: 'linear-gradient(135deg, #003366 0%, #002244 100%)',
+    screenIcon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
+    screenLabel: 'Área da Aula',
+  },
+  {
+    titleParts: ['Veja onde você ', 'errou', ', para não errar de novo'],
+    desc: 'Erros registrados no mapa com localização exata. Aluno evolui, instrutor acompanha.',
+    gradient: 'linear-gradient(135deg, #1a0533 0%, #0d0222 100%)',
+    screenIcon: 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7',
+    screenLabel: 'Mapa de Erros',
+  },
+  {
+    titleParts: ['Painel ', 'financeiro', ' completo'],
+    desc: 'Controle de ganhos, aulas confirmadas e histórico de pagamentos em um único lugar.',
+    gradient: 'linear-gradient(135deg, #1a2a00 0%, #0d1500 100%)',
+    screenIcon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+    screenLabel: 'Financeiro',
+  },
+];
+
 /* ─── Perspective grid SVG ─── */
 const PerspectiveGrid = React.forwardRef((_, ref) => (
   <div
@@ -104,6 +128,10 @@ const Hero = () => {
   const finalRef = useRef(null);
   const progressRef = useRef(null);
   const indicatorRef = useRef(null);
+  const showcaseRef = useRef(null);
+  const showcaseScreenRefs = useRef([]);
+  const showcaseTextRefs = useRef([]);
+  const showcaseDotRefs = useRef([]);
 
   useEffect(() => {
     setWebglOk(isWebGLSupported());
@@ -214,16 +242,36 @@ const Hero = () => {
     gsap.set(finalRef.current, { opacity: 1, x: 0 });
     gsap.set(animGroupRef.current, { opacity: 1, x: 0, scale: 1 });
     gsap.set(cardsContainerRef.current, { opacity: 0, x: '100vw' });
+    gsap.set(showcaseRef.current, { opacity: 0 });
+    showcaseScreenRefs.current.forEach((el, i) => {
+      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0 });
+    });
+    showcaseTextRefs.current.forEach((el, i) => {
+      if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0, y: i === 0 ? 0 : 50 });
+    });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: '+=450%',
+        end: '+=800%',
         scrub: 1.2,
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
+        onUpdate: (self) => {
+          // Update showcase dots based on position within showcase phase
+          const phaseStart = 9.5 / 17;
+          const phaseEnd = 16 / 17;
+          if (self.progress >= phaseStart && self.progress <= phaseEnd) {
+            const p = (self.progress - phaseStart) / (phaseEnd - phaseStart);
+            const idx = Math.min(Math.floor(p * 3), 2);
+            showcaseDotRefs.current.forEach((dot, i) => {
+              if (!dot) return;
+              dot.classList.toggle('active', i === idx);
+            });
+          }
+        },
       },
     });
 
@@ -261,6 +309,29 @@ const Hero = () => {
         3.5 + (index * 0.5)
       );
     });
+
+    // ── AppShowcase phase ──
+
+    // Features slide out
+    tl.to(cardsContainerRef.current, { x: '100vw', opacity: 0, duration: 2, ease: 'power2.inOut' }, 8);
+
+    // AppShowcase fades in
+    tl.to(showcaseRef.current, { opacity: 1, duration: 1.5, ease: 'power2.out' }, 9.5);
+
+    // Topic 0 → 1  (positions 11–13)
+    tl.to(showcaseTextRefs.current[0], { opacity: 0, y: -50, duration: 2, ease: 'power2.inOut' }, 11);
+    tl.to(showcaseScreenRefs.current[0], { opacity: 0, duration: 1.5, ease: 'power1.inOut' }, 11);
+    tl.to(showcaseScreenRefs.current[1], { opacity: 1, duration: 1.5, ease: 'power1.inOut' }, 11.5);
+    tl.fromTo(showcaseTextRefs.current[1], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 2, ease: 'power2.out' }, 12);
+
+    // Topic 1 → 2  (positions 14–16)
+    tl.to(showcaseTextRefs.current[1], { opacity: 0, y: -50, duration: 2, ease: 'power2.inOut' }, 14);
+    tl.to(showcaseScreenRefs.current[1], { opacity: 0, duration: 1.5, ease: 'power1.inOut' }, 14);
+    tl.to(showcaseScreenRefs.current[2], { opacity: 1, duration: 1.5, ease: 'power1.inOut' }, 14.5);
+    tl.fromTo(showcaseTextRefs.current[2], { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 2, ease: 'power2.out' }, 15);
+
+    // End pad
+    tl.to({}, { duration: 1 }, 16);
 
     // Enable pointer events appropriately
     ScrollTrigger.create({
@@ -445,6 +516,61 @@ const Hero = () => {
           setActiveTab={setActiveTab}
           cardRefs={cardRefs}
         />
+
+        {/* AppShowcase — animated in by Hero timeline */}
+        <div ref={showcaseRef} className="showcase-in-hero">
+          <div className="showcase-header">
+            <h2>O app que <span className="highlight">trabalha</span> por você</h2>
+            <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
+          </div>
+          <div className="showcase-layout">
+            <div className="phone-mockup">
+              <div className="phone-notch" />
+              <div className="phone-screen-area">
+                {SHOWCASE_TOPICS.map((topic, i) => (
+                  <div
+                    key={i}
+                    ref={el => showcaseScreenRefs.current[i] = el}
+                    className="phone-screen-item"
+                    style={{ background: topic.gradient }}
+                  >
+                    <svg className="screen-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d={topic.screenIcon} />
+                    </svg>
+                    <span className="screen-label">{topic.screenLabel}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="showcase-text-panel">
+              <div className="showcase-topic-items">
+                {SHOWCASE_TOPICS.map((topic, i) => (
+                  <div
+                    key={i}
+                    ref={el => showcaseTextRefs.current[i] = el}
+                    className="showcase-topic-item"
+                  >
+                    <h3>
+                      {topic.titleParts[0]}
+                      <span className="highlight">{topic.titleParts[1]}</span>
+                      {topic.titleParts[2]}
+                    </h3>
+                    <p>{topic.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="showcase-dots">
+                {SHOWCASE_TOPICS.map((_, i) => (
+                  <span
+                    key={i}
+                    ref={el => showcaseDotRefs.current[i] = el}
+                    className={`showcase-dot${i === 0 ? ' active' : ''}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Main hero content - Positioned Left */}
         <div ref={finalRef} className="hero-content-wrapper">

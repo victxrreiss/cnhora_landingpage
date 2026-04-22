@@ -753,7 +753,7 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-/* Left side buttons — silent switch only (volume handled by explicit divs) */
+/* Left side buttons — silent switch + 2 volume */
 .phone-mockup::before {
   content: '';
   position: absolute;
@@ -763,6 +763,11 @@ body {
   height: 30px;
   background: linear-gradient(180deg, #5a5a5c, #3a3a3c);
   border-radius: 3px 0 0 3px;
+  /* Volume up + volume down via box-shadow */
+  box-shadow:
+    0 45px 0 4px #3a3a3c,
+    0 45px 0 4px #3a3a3c,
+    0 88px 0 linear-gradient(180deg, #5a5a5c, #3a3a3c);
 }
 .phone-btn-vol-up,
 .phone-btn-vol-down {
@@ -804,8 +809,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 22px;
-  height: 54px;
+  padding: 16px 28px 0;
+  height: 52px;
   flex-shrink: 0;
   position: relative;
   z-index: 5;
@@ -827,10 +832,10 @@ body {
 /* Dynamic Island */
 .phone-dynamic-island {
   position: absolute;
-  top: 8px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  width: 112px;
+  width: 126px;
   height: 37px;
   background: #000;
   border-radius: 20px;

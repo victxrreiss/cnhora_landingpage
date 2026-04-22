@@ -637,10 +637,10 @@ const Hero = () => {
                       <path d="M2 4.5a8 8 0 0112 0" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                     </svg>
                     {/* Battery */}
-                    <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-                      <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" stroke="white" strokeOpacity="0.35"/>
-                      <rect x="2" y="2" width="15" height="8" rx="2" fill="white"/>
-                      <path d="M22 4.5v3a1.5 1.5 0 000-3z" fill="white" fillOpacity="0.4"/>
+                    <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
+                      <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" strokeOpacity="0.35"/>
+                      <rect x="2" y="2" width="16" height="8" rx="2" fill="white"/>
+                      <path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="white" fillOpacity="0.4"/>
                     </svg>
                   </div>
                 </div>

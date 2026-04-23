@@ -721,6 +721,12 @@ body {
     display: none !important;
   }
 
+  /* Reduce excess top padding on animation group */
+  .hero-animation-group {
+    min-height: 280px !important;
+    padding: 4rem 0 1rem !important;
+  }
+
   .hero-tab {
     padding: 0.65rem 1.2rem;
     font-size: 0.85rem;
@@ -918,6 +924,8 @@ body {
   }
 
   .cta-buttons {
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     gap: 0.7rem;
   }
@@ -925,8 +933,13 @@ body {
   .cta-btn {
     width: 100%;
     justify-content: center;
+    max-width: 320px;
     font-size: 0.92rem;
     padding: 0.82rem 1rem;
+  }
+
+  .cta-logo-wrapper {
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -1576,13 +1589,13 @@ body {
   }
 
   .hero-animation-group .orbital-ring.ring-1 {
-    width: 340px !important;
-    height: 325px !important;
+    width: 200px !important;
+    height: 190px !important;
   }
 
   .hero-animation-group .orbital-ring.ring-2 {
-    width: 410px !important;
-    height: 395px !important;
+    width: 250px !important;
+    height: 240px !important;
   }
 
   .ring-3 {
@@ -1727,5 +1740,149 @@ body {
   .phone-mockup {
     width: 188px;
     height: 395px;
+  }
+}
+
+/* ── Mobile Navigation Drawer ── */
+
+.mobile-hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.mobile-hamburger:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mobile-nav-drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(0, 10, 25, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1.5rem 1.25rem;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 0.9rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(200, 220, 255, 0.8);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: color 0.15s;
+}
+
+.mobile-nav-link:hover {
+  color: #fff;
+}
+
+.mobile-nav-cta {
+  margin-top: 0.85rem;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  display: block;
+}
+
+/* ── AppShowcase Mobile Cards ── */
+
+/* Hidden on desktop — shown only inside the 1024px media query below */
+.showcase-mobile-cards {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  /* Hide the phone mockup and text panel on mobile */
+  .showcase-layout .phone-mockup,
+  .showcase-layout .showcase-text-panel {
+    display: none;
+  }
+
+  /* Show mobile cards container */
+  .showcase-mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    padding: 0 0.25rem;
+  }
+
+  /* Card shell — matches .hero-feature-card visual style */
+  .showcase-mobile-card {
+    border-radius: 1.75rem;
+    background: rgba(0, 20, 50, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 30px 60px -15px rgba(0, 0, 0, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  /* Screen preview area — shows scaled-down topic.screenContent */
+  .showcase-mobile-card-preview {
+    height: 200px;
+    overflow: hidden;
+    border-radius: 1.75rem 1.75rem 0 0;
+    position: relative;
+  }
+
+  /* Inner scaler — shrinks the screen content to fit the card */
+  .showcase-mobile-card-preview-inner {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 294px;
+    transform: translateX(-50%) scale(0.62);
+    transform-origin: top center;
+    pointer-events: none;
+  }
+
+  /* Text body below the preview */
+  .showcase-mobile-card-body {
+    padding: 1.1rem 1.4rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .showcase-mobile-card-body .card-badge {
+    align-self: flex-start;
+    margin-bottom: 0.15rem;
+  }
+
+  .showcase-mobile-card-body h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .showcase-mobile-card-body p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    margin: 0;
   }
 }

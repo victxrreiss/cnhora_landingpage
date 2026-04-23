@@ -10,6 +10,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -71,7 +72,49 @@ const Navbar = () => {
           </motion.a>
         </div>
 
+        {/* Mobile hamburger button */}
+        <button
+          className="md:hidden mobile-hamburger"
+          onClick={() => setIsMenuOpen(prev => !prev)}
+          aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-nav-drawer"
+        >
+          {isMenuOpen ? (
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          ) : (
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          )}
+        </button>
+
       </div>
+
+      {/* Mobile navigation drawer */}
+      {isMenuOpen && (
+        <div id="mobile-nav-drawer" className="mobile-nav-drawer">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="mobile-nav-link"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href="#cta"
+            className="btn-nav-primary mobile-nav-cta"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Começar grátis
+          </a>
+        </div>
+      )}
     </nav>
   );
 };

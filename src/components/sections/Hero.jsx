@@ -222,6 +222,7 @@ const Hero = () => {
   const showcaseScreenRefs = useRef([]);
   const showcaseTextRefs = useRef([]);
   const showcaseDotRefs = useRef([]);
+  const showcaseMobileCardRefs = useRef([]);
   const ctaRef = useRef(null);
   const ctaLogoRef = useRef(null);
   const ctaTitleRef = useRef(null);
@@ -841,6 +842,38 @@ const Hero = () => {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Mobile cards — visible only on mobile, replaces phone mockup */}
+          <div className="showcase-mobile-cards">
+            {SHOWCASE_TOPICS.map((topic, i) => (
+              <div
+                key={i}
+                ref={el => showcaseMobileCardRefs.current[i] = el}
+                className="showcase-mobile-card"
+              >
+                {/* Screen content preview */}
+                <div
+                  className="showcase-mobile-card-preview"
+                  style={{ background: topic.gradient }}
+                >
+                  <div className="showcase-mobile-card-preview-inner">
+                    {topic.screenContent}
+                  </div>
+                </div>
+
+                {/* Text body */}
+                <div className="showcase-mobile-card-body">
+                  <span className="card-badge">{topic.screenLabel}</span>
+                  <h3>
+                    {topic.titleParts[0]}
+                    <span className="highlight">{topic.titleParts[1]}</span>
+                    {topic.titleParts[2]}
+                  </h3>
+                  <p>{topic.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

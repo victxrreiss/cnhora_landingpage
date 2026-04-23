@@ -200,7 +200,10 @@ const PerspectiveGrid = React.forwardRef((_, ref) => (
 
 /* ─── Main Hero component ─── */
 const Hero = () => {
-  const [webglOk, setWebglOk] = useState(true);
+  const [webglOk, setWebglOk] = useState(() => isWebGLSupported());
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 1024px)').matches : false
+  );
   const [activeTab, setActiveTab] = useState('aluno');
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
@@ -225,20 +228,43 @@ const Hero = () => {
   const ctaTextRef = useRef(null);
   const ctaButtonsRef = useRef(null);
 
-  useEffect(() => {
-    setWebglOk(isWebGLSupported());
-  }, []);
-
   const goToCards = (tab) => {
     setActiveTab(tab);
+    if (isMobile && cardsContainerRef.current) {
+      const cardsTop = cardsContainerRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: cardsTop - 84, behavior: 'smooth' });
+      return;
+    }
     const heroTop = heroRef.current
       ? heroRef.current.getBoundingClientRect().top + window.scrollY
       : 0;
     window.scrollTo({ top: heroTop + window.innerHeight * 2.8, behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1024px)');
+    const onChange = (e) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+
+    if (mq.addEventListener) {
+      mq.addEventListener('change', onChange);
+    } else {
+      mq.addListener(onChange);
+    }
+
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener('change', onChange);
+      } else {
+        mq.removeListener(onChange);
+      }
+    };
+  }, []);
+
   /* ─── Three.js particles ─── */
   useEffect(() => {
+    if (!webglOk || isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -323,10 +349,91 @@ const Hero = () => {
       geo.dispose();
       mat.dispose();
     };
-  }, []);
+  }, [webglOk, isMobile]);
 
   /* ─── GSAP scroll timeline ─── */
   useEffect(() => {
+    if (isMobile) {
+      const mobileTriggers = [];
+      const registerReveal = (el) => {
+        if (!el) return;
+        const tween = gsap.fromTo(
+          el,
+          { opacity: 0, y: 36 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+        if (tween.scrollTrigger) mobileTriggers.push(tween.scrollTrigger);
+      };
+
+      registerReveal(cardsContainerRef.current);
+      registerReveal(showcaseRef.current);
+      registerReveal(ctaRef.current);
+
+      const screens = showcaseScreenRefs.current.filter(Boolean);
+      const texts = showcaseTextRefs.current.filter(Boolean);
+      const dots = showcaseDotRefs.current.filter(Boolean);
+
+      if (screens.length > 0) {
+        gsap.set(screens, { opacity: 0 });
+        gsap.set(screens[0], { opacity: 1 });
+      }
+
+      if (texts.length > 0) {
+        gsap.set(texts, { opacity: 0, y: 22 });
+        gsap.set(texts[0], { opacity: 1, y: 0 });
+      }
+
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === 0));
+
+      let showcaseTl;
+      if (showcaseRef.current && screens.length > 1) {
+        showcaseTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: showcaseRef.current,
+            start: 'top 72%',
+            end: 'bottom 28%',
+            scrub: 0.75,
+            onUpdate: (self) => {
+              if (!dots.length) return;
+              const idx = Math.min(Math.floor(self.progress * screens.length), screens.length - 1);
+              dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+            },
+          },
+        });
+
+        for (let i = 0; i < screens.length - 1; i++) {
+          const at = i * 1.15;
+          showcaseTl
+            .to(screens[i], { opacity: 0, duration: 1 }, at)
+            .to(screens[i + 1], { opacity: 1, duration: 1 }, at + 0.14);
+
+          if (texts[i]) {
+            showcaseTl.to(texts[i], { opacity: 0, y: -18, duration: 0.9 }, at);
+          }
+          if (texts[i + 1]) {
+            showcaseTl.to(texts[i + 1], { opacity: 1, y: 0, duration: 0.9 }, at + 0.18);
+          }
+        }
+
+        if (showcaseTl.scrollTrigger) mobileTriggers.push(showcaseTl.scrollTrigger);
+      }
+
+      return () => {
+        if (showcaseTl) showcaseTl.kill();
+        mobileTriggers.forEach((st) => st.kill());
+      };
+    }
+
     const hero = heroRef.current;
     if (!hero) return;
 
@@ -351,8 +458,8 @@ const Hero = () => {
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: '+=1100%',
-        scrub: 1.2,
+        end: '+=680%',
+        scrub: 0.9,
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
@@ -441,7 +548,7 @@ const Hero = () => {
     tl.to({}, { duration: 1 }, 22);
 
     // Enable pointer events appropriately
-    ScrollTrigger.create({
+    const cardsTrigger = ScrollTrigger.create({
       trigger: hero,
       start: 'top top',
       onEnter: () => {
@@ -449,7 +556,7 @@ const Hero = () => {
       }
     });
 
-    ScrollTrigger.create({
+    const showcaseTrigger = ScrollTrigger.create({
       trigger: hero,
       start: '+=250%',
       onEnter: () => {
@@ -462,7 +569,7 @@ const Hero = () => {
       }
     });
 
-    ScrollTrigger.create({
+    const ctaTrigger = ScrollTrigger.create({
       trigger: hero,
       start: '+=870%',
       onEnter: () => {
@@ -486,13 +593,17 @@ const Hero = () => {
 
     return () => {
       tl.kill();
-      ScrollTrigger.getAll().forEach(st => st.kill());
+      cardsTrigger.kill();
+      showcaseTrigger.kill();
+      ctaTrigger.kill();
       document.removeEventListener('mousemove', onParallax);
     };
-  }, []);
+  }, [isMobile]);
 
   /* ─── Custom cursor ─── */
   useEffect(() => {
+    if (isMobile) return;
+
     const dot = document.createElement('div');
     dot.className = 'custom-cursor-dot';
     const ring = document.createElement('div');
@@ -518,13 +629,15 @@ const Hero = () => {
     return () => {
       document.removeEventListener('mousemove', onMove);
       targets.forEach(el => { el.removeEventListener('mouseenter', enlarge); el.removeEventListener('mouseleave', shrink); });
-      dot.remove();
-      ring.remove();
+      if (dot.parentNode) dot.parentNode.removeChild(dot);
+      if (ring.parentNode) ring.parentNode.removeChild(ring);
     };
-  }, []);
+  }, [isMobile]);
 
   /* ─── Progress bar + scroll indicator ─── */
   useEffect(() => {
+    if (isMobile) return;
+
     const onScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
@@ -537,50 +650,54 @@ const Hero = () => {
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  if (!webglOk) return <HeroFallback />;
+  }, [isMobile]);
 
   return (
     <>
       {/* Progress bar */}
-      <div ref={progressRef} id="hero-progress-bar" />
+      {!isMobile && <div ref={progressRef} id="hero-progress-bar" />}
 
       {/* Scroll indicator */}
-      <div
-        ref={indicatorRef}
-        style={{
-          position: 'fixed', bottom: '2rem', left: '50%',
-          transform: 'translateX(-50%)', zIndex: 100,
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: '0.5rem', opacity: 1, transition: 'opacity 0.5s', pointerEvents: 'none',
-        }}
-      >
-        <div className="scroll-mouse"><div className="scroll-wheel" /></div>
-        <span className="scroll-text">Role para explorar</span>
-      </div>
+      {!isMobile && (
+        <div
+          ref={indicatorRef}
+          style={{
+            position: 'fixed', bottom: '2rem', left: '50%',
+            transform: 'translateX(-50%)', zIndex: 100,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: '0.5rem', opacity: 1, transition: 'opacity 0.5s', pointerEvents: 'none',
+          }}
+        >
+          <div className="scroll-mouse"><div className="scroll-wheel" /></div>
+          <span className="scroll-text">Role para explorar</span>
+        </div>
+      )}
 
       {/* ─── Pinned hero section ─── */}
       <section
         ref={heroRef}
         style={{
-          height: '100vh',
+          height: isMobile ? 'auto' : '100vh',
+          minHeight: isMobile ? '100svh' : '100vh',
           position: 'relative',
-          overflow: 'hidden',
+          overflow: isMobile ? 'visible' : 'hidden',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'stretch' : 'center',
+          justifyContent: isMobile ? 'flex-start' : 'center',
           background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%)',
         }}
       >
         {/* Three.js canvas */}
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: 'absolute', top: 0, left: 0,
-            width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none',
-          }}
-        />
+        {webglOk && !isMobile && (
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none',
+            }}
+          />
+        )}
 
         {/* Ambient light */}
         <div className="ambient-light" style={{ zIndex: 2 }} />
@@ -628,15 +745,17 @@ const Hero = () => {
         </div>
 
         {/* Features section — tab switcher + cards */}
-        <Features
-          ref={cardsContainerRef}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          cardRefs={cardRefs}
-        />
+        <div style={{ order: isMobile ? 2 : undefined, width: isMobile ? '100%' : undefined }}>
+          <Features
+            ref={cardsContainerRef}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            cardRefs={cardRefs}
+          />
+        </div>
 
         {/* AppShowcase — animated in by Hero timeline */}
-        <div ref={showcaseRef} className="showcase-in-hero">
+        <div ref={showcaseRef} className="showcase-in-hero" style={{ order: isMobile ? 3 : undefined }}>
           <div className="showcase-header">
             <h2>O app que <span className="highlight">trabalha</span> por você</h2>
             <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
@@ -726,7 +845,7 @@ const Hero = () => {
         </div>
 
         {/* CTA Download Section — animated in after AppShowcase */}
-        <div ref={ctaRef} className="cta-download-section">
+        <div ref={ctaRef} className="cta-download-section" style={{ order: isMobile ? 4 : undefined }}>
 
           {/* Animated logo with orbital rings */}
           <div ref={ctaLogoRef} className="cta-logo-wrapper">
@@ -789,7 +908,7 @@ const Hero = () => {
         </div>
 
         {/* Main hero content - Positioned Left */}
-        <div ref={finalRef} className="hero-content-wrapper">
+        <div ref={finalRef} className="hero-content-wrapper" style={{ order: isMobile ? 1 : undefined }}>
           {/* Badge */}
           <div className="hero-badge">
             <span className="dot" />

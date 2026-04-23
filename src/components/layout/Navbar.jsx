@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import cnhoraLogo from '/cnhora-logo.svg';
 
 const navLinks = [
@@ -11,7 +10,6 @@ const navLinks = [
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -73,48 +71,7 @@ const Navbar = () => {
           </motion.a>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
       </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-nav border-t overflow-hidden"
-            style={{ borderColor: 'rgba(255,255,255,0.05)' }}
-          >
-            <div className="px-8 py-6 flex flex-col gap-5">
-              {navLinks.map(link => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-base font-semibold"
-                  style={{ color: 'rgba(200,220,255,0.85)' }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </a>
-              ))}
-              <a
-                href="#cta"
-                className="btn-nav-primary justify-center"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Começar grátis
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 };

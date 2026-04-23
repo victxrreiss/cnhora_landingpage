@@ -663,16 +663,302 @@ body {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .hero-content-wrapper { width: 90%; left: 5%; align-items: center; text-align: center; position: relative; padding: 4rem 0; }
-  .hero-title, .hero-subtitle, .stats-row, .btn-cta-group, .trust-badges { text-align: center; justify-content: center; align-items: center; }
-  .hero-animation-group { display: none; }
-  .hero-cards-container { position: relative; width: 100%; opacity: 1; pointer-events: auto; padding: 2rem 1rem; }
-  .hero-feature-card { min-height: auto; width: 100%; max-width: 340px; }
+  .hero-content-wrapper {
+    width: min(92%, 720px);
+    left: 0;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 6.5rem 0 2rem;
+  }
+  .hero-title,
+  .hero-subtitle,
+  .stats-row,
+  .btn-cta-group,
+  .trust-badges {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero-animation-group,
+  .custom-cursor-dot,
+  .custom-cursor-ring,
+  .scroll-text,
+  .scroll-mouse {
+    display: none;
+  }
+
+  .hero-cards-container {
+    position: relative;
+    width: min(100%, 860px);
+    opacity: 1;
+    pointer-events: auto;
+    padding: 2rem 1rem;
+    inset: auto;
+    height: auto;
+    gap: 1.25rem;
+  }
+
+  .hero-animation-group {
+    display: flex !important;
+    position: relative !important;
+    right: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 320px;
+    padding: 5.5rem 0 1.5rem;
+    margin: 0 auto;
+    z-index: 35 !important;
+    order: 1;
+  }
+
+  .logo-container {
+    width: min(72vw, 260px) !important;
+    height: min(72vw, 260px) !important;
+  }
+
+  .ring-3 {
+    display: none !important;
+  }
+
+  .hero-tab {
+    padding: 0.65rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-cards-grid {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .hero-feature-card {
+    min-height: auto;
+    width: 100%;
+    max-width: 360px;
+    padding: 1.6rem 1.25rem;
+  }
+
+  .showcase-in-hero {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    pointer-events: auto;
+    width: min(100%, 900px);
+    padding: 2.5rem 1rem 1rem;
+  }
+
+  .showcase-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .showcase-layout {
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .phone-mockup {
+    width: 250px;
+    height: 525px;
+  }
+
+  .showcase-text-panel {
+    width: min(100%, 680px);
+    text-align: center;
+  }
+
+  .showcase-topic-items {
+    height: auto;
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .showcase-topic-item {
+    position: relative;
+    opacity: 1 !important;
+    transform: none !important;
+    background: rgba(0, 20, 50, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .showcase-dots {
+    display: none;
+  }
+
+  .cta-download-section {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 2.5rem 1rem 4rem;
+    min-height: auto;
+  }
+
+  .cta-logo-wrapper {
+    margin-bottom: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .ring-2, .ring-3 { display: none; }
-  .hero-feature-card { padding: 1.5rem; }
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.85rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+    line-height: 1.08;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-row {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.68rem;
+  }
+
+  .btn-cta-group {
+    width: 100%;
+    gap: 0.7rem;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-download {
+    width: 100%;
+    justify-content: center;
+    padding: 0.92rem 1rem;
+  }
+
+  .trust-badges {
+    margin-top: 1.4rem;
+    gap: 0.8rem;
+  }
+
+  .hero-tab-switcher {
+    width: 100%;
+  }
+
+  .hero-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0.7rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .hero-feature-card {
+    max-width: 100%;
+  }
+
+  .showcase-header h2 {
+    font-size: clamp(1.45rem, 7vw, 2rem);
+  }
+
+  .showcase-header p {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .phone-mockup {
+    width: 212px;
+    height: 445px;
+    border-radius: 34px;
+  }
+
+  .phone-inner,
+  .phone-screen-area {
+    border-radius: 31px;
+  }
+
+  .phone-status-bar {
+    height: 44px;
+    padding: 0 14px;
+  }
+
+  .phone-dynamic-island {
+    width: 76px;
+    height: 26px;
+    top: 8px;
+  }
+
+  .showcase-topic-item h3 {
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
+    margin-bottom: 0.55rem;
+  }
+
+  .showcase-topic-item p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .cta-title {
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+  }
+
+  .cta-desc {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 1.4rem;
+  }
+
+  .cta-buttons {
+    width: 100%;
+    gap: 0.7rem;
+  }
+
+  .cta-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.92rem;
+    padding: 0.82rem 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-content-wrapper {
+    width: 94%;
+    padding-top: 6.25rem;
+  }
+
+  .hero-badge {
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+  }
+
+  .stats-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .stat-item {
+    flex: 1;
+    min-width: 30%;
+  }
+
+  .phone-mockup {
+    width: 188px;
+    height: 395px;
+  }
 }
 
 /* ===== APP SHOWCASE SECTION ===== */
@@ -1236,4 +1522,210 @@ body {
 
 .showcase-dot.active {
   background: #FF6B00;
+}
+
+/* ===== FINAL MOBILE OVERRIDES (keep at end) ===== */
+@media (max-width: 1024px) {
+  .custom-cursor-dot,
+  .custom-cursor-ring,
+  .scroll-text,
+  .scroll-mouse {
+    display: none !important;
+  }
+
+  .hero-content-wrapper {
+    position: relative !important;
+    left: 0 !important;
+    width: min(92%, 720px) !important;
+    padding: 6.5rem 0 2rem !important;
+    margin: 0 auto !important;
+    align-items: center !important;
+    text-align: center !important;
+    z-index: 30;
+  }
+
+  .hero-title,
+  .hero-subtitle,
+  .stats-row,
+  .btn-cta-group,
+  .trust-badges {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .hero-animation-group {
+    display: flex !important;
+    position: relative !important;
+    right: auto !important;
+    width: min(100%, 860px) !important;
+    height: auto !important;
+    min-height: 270px !important;
+    padding: 4.5rem 0 1.25rem !important;
+    margin-top: 1rem !important;
+    margin: 0 auto !important;
+    z-index: 35 !important;
+    order: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .logo-container {
+    width: min(72vw, 260px) !important;
+    height: min(72vw, 260px) !important;
+  }
+
+  .hero-animation-group .orbital-ring.ring-1 {
+    width: 340px !important;
+    height: 325px !important;
+  }
+
+  .hero-animation-group .orbital-ring.ring-2 {
+    width: 410px !important;
+    height: 395px !important;
+  }
+
+  .ring-3 {
+    display: none !important;
+  }
+
+  .hero-cards-container {
+    position: relative !important;
+    inset: auto !important;
+    width: min(100%, 860px) !important;
+    height: auto !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    padding: 2rem 1rem !important;
+    margin: 0 auto !important;
+    gap: 1.25rem !important;
+    z-index: 25;
+    order: 2 !important;
+  }
+
+  .hero-cards-grid {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .hero-feature-card {
+    max-width: 360px;
+    width: 100%;
+    min-height: auto;
+    padding: 1.6rem 1.25rem;
+  }
+
+  .showcase-in-hero {
+    position: relative !important;
+    inset: auto !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    width: min(100%, 900px) !important;
+    padding: 2.5rem 1rem 1rem !important;
+    margin: 0 auto !important;
+    z-index: 25;
+    order: 3 !important;
+  }
+
+  .showcase-layout {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    width: 100%;
+  }
+
+  .showcase-text-panel {
+    width: min(100%, 680px) !important;
+    text-align: center !important;
+  }
+
+  .showcase-topic-items {
+    position: static !important;
+    height: auto !important;
+    display: grid !important;
+    gap: 1.1rem !important;
+  }
+
+  .showcase-topic-item {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    background: rgba(0, 20, 50, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  /* Start with the first screen visible; GSAP handles crossfade on scroll. */
+  .phone-screen-item {
+    opacity: 0;
+    visibility: visible;
+  }
+
+  .phone-screen-item:first-child {
+    opacity: 1;
+  }
+
+  .showcase-dots {
+    display: none !important;
+  }
+
+  .cta-download-section {
+    position: relative !important;
+    inset: auto !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    min-height: auto !important;
+    padding: 2.5rem 1rem 4rem !important;
+    z-index: 20;
+    order: 4 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-cta-group,
+  .cta-buttons {
+    width: 100%;
+    gap: 0.7rem;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-download,
+  .cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .phone-mockup {
+    width: 212px;
+    height: 445px;
+  }
+
+  .showcase-topic-item h3 {
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
+  }
+
+  .showcase-topic-item p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-content-wrapper {
+    width: 94% !important;
+    padding-top: 6.25rem !important;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .phone-mockup {
+    width: 188px;
+    height: 395px;
+  }
 }

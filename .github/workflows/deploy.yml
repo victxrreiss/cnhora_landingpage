@@ -25,25 +25,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: FTP Diagnostic
+      - name: Deploy via FTP
         run: |
           sudo apt-get install -y lftp
           lftp -c "
             set ftp:ssl-allow no;
-            set net:timeout 30;
+            set net:timeout 60;
+            set net:max-retries 3;
             open ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@147.93.64.174;
-            pwd;
-            ls -la;
-            ls -la public_html;
+            cd public_html;
+            mirror --reverse --delete --verbose --no-perms ./dist/ ./;
             quit
           "
-
-      - name: Deploy via FTP
-        run: |
-          lftp -c "
-            set ftp:ssl-allow no;
-            set net:timeout 30;
-            open ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@147.93.64.174;
-            mirror --reverse --delete --transfer-all --verbose ./dist/ public_html/;
-            quit
-          "
+          echo "Deploy concluído com código: $?"

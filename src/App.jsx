@@ -31,9 +31,9 @@ function App() {
             </ErrorBoundary>
           }
         />
-        <Route path="/privacidade" element={<Privacidade />} />
-        <Route path="/lgpd" element={<LGPD />} />
-        <Route path="/termos" element={<Termos />} />
+        <Route path="/privacidade" element={<ErrorBoundary><Privacidade /></ErrorBoundary>} />
+        <Route path="/lgpd" element={<ErrorBoundary><LGPD /></ErrorBoundary>} />
+        <Route path="/termos" element={<ErrorBoundary><Termos /></ErrorBoundary>} />
       </Routes>
 
       <Footer />

@@ -16,7 +16,7 @@ const FooterLink = ({ to, href, children, highlight = false }) => {
       : 'text-white/45 hover:text-white'
   }`;
   if (to) return <Link to={to} className={base}>{children}</Link>;
-  return <a href={href || '#'} className={base}>{children}</a>;
+  return <a href={href} className={base}>{children}</a>;
 };
 
 const Footer = () => {
@@ -116,7 +116,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/[0.06] max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center md:justify-between gap-3 text-center md:text-left">
+      <div className="border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center md:justify-between gap-3 text-center md:text-left">
         <p className="text-xs text-white/30">
           © {year} CNHora. Todos os direitos reservados.
         </p>
@@ -134,6 +135,7 @@ const Footer = () => {
             ✓ Em conformidade com a LGPD
           </span>
         </div>
+      </div>
       </div>
     </footer>
   );

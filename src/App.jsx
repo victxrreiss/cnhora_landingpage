@@ -1,8 +1,13 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
 import { ErrorBoundary } from './components/ui';
+import Privacidade from './pages/Privacidade';
+import LGPD from './pages/LGPD';
+import Termos from './pages/Termos';
 
 function App() {
   return (
@@ -16,9 +21,22 @@ function App() {
       </Helmet>
 
       <Navbar />
-      <ErrorBoundary>
-        <Hero />
-      </ErrorBoundary>
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary>
+              <Hero />
+            </ErrorBoundary>
+          }
+        />
+        <Route path="/privacidade" element={<Privacidade />} />
+        <Route path="/lgpd" element={<LGPD />} />
+        <Route path="/termos" element={<Termos />} />
+      </Routes>
+
+      <Footer />
     </div>
   );
 }

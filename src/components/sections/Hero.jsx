@@ -5,11 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import cnhoraLogo from '/cnhora-logo.svg';
 import Features from './Features';
 import { isWebGLSupported } from '../../utils';
-import { useDevicePerformance } from '../../hooks';
 
 const HeroFallback = () => (
   <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-    <div style={{ maxWidth: '600px', textAlign: 'center', color: '#fff' }}>
+    <div style={{ maxWidth: 600, textAlign: 'center', color: '#fff' }}>
       <div style={{ marginBottom: '1.5rem', fontSize: '0.85rem', color: '#ff6b00', fontWeight: 600, letterSpacing: '0.05em' }}>
         O marketplace da educação no trânsito
       </div>
@@ -21,8 +20,8 @@ const HeroFallback = () => (
         Agende aulas, faça simulados e conquiste sua CNH sem burocracia.
       </p>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-        <a href="#cta" style={{ background: '#ff6b00', color: '#fff', padding: '0.9rem 2rem', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '1rem' }}>Sou Aluno</a>
-        <a href="#instrutores" style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '0.9rem 2rem', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '1rem' }}>Sou Instrutor</a>
+        <a href="#cta" style={{ background: '#ff6b00', color: '#fff', padding: '0.9rem 2rem', borderRadius: 8, fontWeight: 700, textDecoration: 'none', fontSize: '1rem' }}>Sou Aluno</a>
+        <a href="#instrutores" style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '0.9rem 2rem', borderRadius: 8, fontWeight: 700, textDecoration: 'none', fontSize: '1rem' }}>Sou Instrutor</a>
       </div>
       <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
         <span><strong style={{ color: '#fff', fontSize: '1.2rem' }}>+12k</strong><br />Alunos aprovados</span>
@@ -200,19 +199,12 @@ const PerspectiveGrid = React.forwardRef((_, ref) => (
 ));
 
 /* ─── Main Hero component ─── */
-const Hero = () => {
-  const deviceProfile = useDevicePerformance();
+const Hero = ({ onPinEnd, onPinEnterBack }) => {
   const [webglOk, setWebglOk] = useState(() => isWebGLSupported());
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 1024px)').matches : false
   );
   const [activeTab, setActiveTab] = useState('aluno');
-  const animationLevel = deviceProfile.animationLevel;
-  const isStaticMotion = animationLevel === 'static';
-  const isReducedMotion = animationLevel === 'reduced';
-  const enableFullMotion = animationLevel === 'full';
-  const useStackedLayout = true;
-  const enableParticles = webglOk && !isMobile && deviceProfile.shouldUseWebGL;
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
   const logoRef = useRef(null);
@@ -239,11 +231,15 @@ const Hero = () => {
 
   const goToCards = (tab) => {
     setActiveTab(tab);
-    if (cardsContainerRef.current) {
+    if (isMobile && cardsContainerRef.current) {
       const cardsTop = cardsContainerRef.current.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: cardsTop - 84, behavior: 'smooth' });
       return;
     }
+    const heroTop = heroRef.current
+      ? heroRef.current.getBoundingClientRect().top + window.scrollY
+      : 0;
+    window.scrollTo({ top: heroTop + window.innerHeight * 2.8, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -268,7 +264,7 @@ const Hero = () => {
 
   /* ─── Three.js particles ─── */
   useEffect(() => {
-    if (!enableParticles) return;
+    if (!webglOk || isMobile) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -281,7 +277,7 @@ const Hero = () => {
       setWebglOk(false);
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     const scene = new THREE.Scene();
@@ -354,61 +350,10 @@ const Hero = () => {
       geo.dispose();
       mat.dispose();
     };
-  }, [enableParticles]);
+  }, [webglOk, isMobile]);
 
   /* ─── GSAP scroll timeline ─── */
   useEffect(() => {
-    const screens = showcaseScreenRefs.current.filter(Boolean);
-    const texts = showcaseTextRefs.current.filter(Boolean);
-    const dots = showcaseDotRefs.current.filter(Boolean);
-
-    const showStaticContent = () => {
-      gsap.set(
-        [
-          finalRef.current,
-          animGroupRef.current,
-          cardsContainerRef.current,
-          showcaseRef.current,
-          ctaRef.current,
-          ctaLogoRef.current,
-          ctaTitleRef.current,
-          ctaTextRef.current,
-          ctaButtonsRef.current,
-        ].filter(Boolean),
-        {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          scale: 1,
-          clearProps: 'transform,filter',
-          pointerEvents: 'auto',
-        }
-      );
-
-      if (gridRef.current) {
-        gsap.set(gridRef.current, { opacity: 0.18, clearProps: 'transform,filter' });
-      }
-
-      screens.forEach((el, i) => {
-        gsap.set(el, { opacity: i === 0 ? 1 : 0, clearProps: 'transform,filter' });
-      });
-
-      texts.forEach((el, i) => {
-        gsap.set(el, {
-          opacity: isMobile ? 1 : i === 0 ? 1 : 0,
-          y: 0,
-          clearProps: 'transform,filter',
-        });
-      });
-
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === 0));
-    };
-
-    if (useStackedLayout || isStaticMotion || (isMobile && isReducedMotion)) {
-      showStaticContent();
-      return;
-    }
-
     if (isMobile) {
       const mobileTriggers = [];
       const registerReveal = (el) => {
@@ -434,6 +379,10 @@ const Hero = () => {
       registerReveal(cardsContainerRef.current);
       registerReveal(showcaseRef.current);
       registerReveal(ctaRef.current);
+
+      const screens = showcaseScreenRefs.current.filter(Boolean);
+      const texts = showcaseTextRefs.current.filter(Boolean);
+      const dots = showcaseDotRefs.current.filter(Boolean);
 
       if (screens.length > 0) {
         gsap.set(screens, { opacity: 0 });
@@ -511,7 +460,7 @@ const Hero = () => {
         trigger: hero,
         start: 'top top',
         end: '+=680%',
-        scrub: isReducedMotion ? true : 0.9,
+        scrub: 0.9,
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
@@ -527,6 +476,14 @@ const Hero = () => {
               dot.classList.toggle('active', i === idx);
             });
           }
+        },
+        onLeave: () => {
+          gsap.set(hero, { height: 0, minHeight: 0 });
+          onPinEnd?.();
+        },
+        onEnterBack: () => {
+          gsap.set(hero, { height: '100vh', minHeight: '100vh' });
+          onPinEnterBack?.();
         },
       },
     });
@@ -559,16 +516,9 @@ const Hero = () => {
 
     // Stagger individual cards within the container
     cardRefs.current.forEach((card, index) => {
-      const cardFrom = isReducedMotion
-        ? { x: 120, opacity: 0, scale: 0.92 }
-        : { x: 150, opacity: 0, scale: 0.8, filter: 'blur(10px)' };
-      const cardTo = isReducedMotion
-        ? { x: 0, opacity: 1, scale: 1, ease: 'back.out(1.2)', duration: 2.5 }
-        : { x: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'back.out(1.2)', duration: 2.5 };
-
       tl.fromTo(card,
-        cardFrom,
-        cardTo,
+        { x: 150, opacity: 0, scale: 0.8, filter: 'blur(10px)' },
+        { x: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'back.out(1.2)', duration: 2.5 },
         3.5 + (index * 0.5)
       );
     });
@@ -648,24 +598,20 @@ const Hero = () => {
         gsap.to(logoGroup, { x: x, y: y, duration: 1.5, ease: 'power2.out', overwrite: 'auto' });
       }
     };
-    if (enableFullMotion) {
-      document.addEventListener('mousemove', onParallax);
-    }
+    document.addEventListener('mousemove', onParallax);
 
     return () => {
       tl.kill();
       cardsTrigger.kill();
       showcaseTrigger.kill();
       ctaTrigger.kill();
-      if (enableFullMotion) {
-        document.removeEventListener('mousemove', onParallax);
-      }
+      document.removeEventListener('mousemove', onParallax);
     };
-  }, [isMobile, isReducedMotion, isStaticMotion, enableFullMotion, useStackedLayout]);
+  }, [isMobile]);
 
   /* ─── Custom cursor ─── */
   useEffect(() => {
-    if (isMobile || !enableFullMotion) return;
+    if (isMobile) return;
 
     const dot = document.createElement('div');
     dot.className = 'custom-cursor-dot';
@@ -695,11 +641,11 @@ const Hero = () => {
       if (dot.parentNode) dot.parentNode.removeChild(dot);
       if (ring.parentNode) ring.parentNode.removeChild(ring);
     };
-  }, [isMobile, enableFullMotion]);
+  }, [isMobile]);
 
   /* ─── Progress bar + scroll indicator ─── */
   useEffect(() => {
-    if (isMobile || isStaticMotion) return;
+    if (isMobile) return;
 
     const onScroll = () => {
       const scrollTop = window.scrollY;
@@ -713,31 +659,46 @@ const Hero = () => {
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [isMobile, isStaticMotion]);
+  }, [isMobile]);
 
   return (
     <>
       {/* Progress bar */}
-      {!isMobile && !isStaticMotion && <div ref={progressRef} id="hero-progress-bar" />}
+      {!isMobile && <div ref={progressRef} id="hero-progress-bar" />}
+
+      {/* Scroll indicator */}
+      {!isMobile && (
+        <div
+          ref={indicatorRef}
+          style={{
+            position: 'fixed', bottom: '2rem', left: '50%',
+            transform: 'translateX(-50%)', zIndex: 100,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: '0.5rem', opacity: 1, transition: 'opacity 0.5s', pointerEvents: 'none',
+          }}
+        >
+          <div className="scroll-mouse"><div className="scroll-wheel" /></div>
+          <span className="scroll-text">Role para explorar</span>
+        </div>
+      )}
 
       {/* ─── Pinned hero section ─── */}
       <section
         ref={heroRef}
-        className={`hero-motion-${animationLevel} hero-vertical-flow`}
         style={{
-          height: useStackedLayout ? 'auto' : '100vh',
-          minHeight: useStackedLayout ? '100svh' : '100vh',
+          height: isMobile ? 'auto' : '100vh',
+          minHeight: isMobile ? '100svh' : '100vh',
           position: 'relative',
-          overflow: useStackedLayout ? 'visible' : 'hidden',
+          overflow: isMobile ? 'visible' : 'hidden',
           display: 'flex',
-          flexDirection: useStackedLayout ? 'column' : 'row',
-          alignItems: useStackedLayout ? 'stretch' : 'center',
-          justifyContent: useStackedLayout ? 'flex-start' : 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'stretch' : 'center',
+          justifyContent: isMobile ? 'flex-start' : 'center',
           background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%)',
         }}
       >
         {/* Three.js canvas */}
-        {enableParticles && (
+        {webglOk && !isMobile && (
           <canvas
             ref={canvasRef}
             style={{
@@ -755,32 +716,31 @@ const Hero = () => {
 
         {/* Animation Group (Logo + Rings) - Positioned Right */}
         <div ref={animGroupRef} className="hero-animation-group">
-          {/* Logo container - relative centered in group (rings moved inside to ensure perfect centering) */}
-          <div className="logo-container">
-            {/* Orbital rings - absolute centered in container */}
-            <div
-              ref={ring1Ref}
-              className="orbital-ring ring-1"
-              style={{ width: 380, height: 360, border: '1px solid rgba(255,107,0,0.25)', zIndex: 15 }}
-            />
-            <div
-              ref={ring2Ref}
-              className="orbital-ring ring-2"
-              style={{ width: 460, height: 440, border: '1px solid rgba(0,102,204,0.25)', zIndex: 15 }}
-            />
-            <div
-              ref={ring3Ref}
-              className="orbital-ring ring-3"
-              style={{ width: 540, height: 520, border: '1px solid rgba(255,107,0,0.12)', zIndex: 15 }}
-            />
+          {/* Orbital rings - absolute centered in group */}
+          <div
+            ref={ring1Ref}
+            className="orbital-ring ring-1"
+            style={{ width: 380, height: 360, border: '1px solid rgba(255,107,0,0.25)', zIndex: 15 }}
+          />
+          <div
+            ref={ring2Ref}
+            className="orbital-ring ring-2"
+            style={{ width: 460, height: 440, border: '1px solid rgba(0,102,204,0.25)', zIndex: 15 }}
+          />
+          <div
+            ref={ring3Ref}
+            className="orbital-ring ring-3"
+            style={{ width: 540, height: 520, border: '1px solid rgba(255,107,0,0.12)', zIndex: 15 }}
+          />
 
+          {/* Logo container - relative centered in group */}
+          <div className="logo-container">
             <div
               ref={logoRef}
               style={{
                 width: 280, height: 280,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 filter: 'drop-shadow(0 0 35px rgba(255,107,0,0.45)) drop-shadow(0 0 70px rgba(0,100,255,0.25))',
-                zIndex: 20,
               }}
             >
               <img
@@ -794,7 +754,7 @@ const Hero = () => {
         </div>
 
         {/* Features section — tab switcher + cards */}
-        <div style={{ order: useStackedLayout ? 2 : undefined, width: useStackedLayout ? '100%' : undefined }}>
+        <div style={{ order: isMobile ? 2 : undefined, width: isMobile ? '100%' : undefined }}>
           <Features
             ref={cardsContainerRef}
             activeTab={activeTab}
@@ -804,7 +764,7 @@ const Hero = () => {
         </div>
 
         {/* AppShowcase — animated in by Hero timeline */}
-        <div ref={showcaseRef} className="showcase-in-hero" style={{ order: useStackedLayout ? 3 : undefined }}>
+        <div ref={showcaseRef} className="showcase-in-hero" style={{ order: isMobile ? 3 : undefined }}>
           <div className="showcase-header">
             <h2>O app que <span className="highlight">trabalha</span> por você</h2>
             <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
@@ -926,7 +886,7 @@ const Hero = () => {
         </div>
 
         {/* CTA Download Section — animated in after AppShowcase */}
-        <div ref={ctaRef} className="cta-download-section" style={{ order: useStackedLayout ? 4 : undefined }}>
+        <div ref={ctaRef} className="cta-download-section" style={{ order: isMobile ? 4 : undefined }}>
 
           {/* Animated logo with orbital rings */}
           <div ref={ctaLogoRef} className="cta-logo-wrapper">
@@ -989,7 +949,7 @@ const Hero = () => {
         </div>
 
         {/* Main hero content - Positioned Left */}
-        <div ref={finalRef} className="hero-content-wrapper" style={{ order: useStackedLayout ? 1 : undefined }}>
+        <div ref={finalRef} className="hero-content-wrapper" style={{ order: isMobile ? 1 : undefined }}>
           {/* Badge */}
           <div className="hero-badge">
             <span className="dot" />

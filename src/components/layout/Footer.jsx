@@ -1,6 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Instagram, Mail } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Instagram, Mail, ShieldCheck, X } from 'lucide-react';
 import cnhoraLogo from '/cnhora-logo.svg';
 
 const WhatsAppIcon = () => (
@@ -9,148 +8,170 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
-const FooterLink = ({ to, href, children, highlight = false }) => {
-  const base = `block text-sm transition-colors ${
-    highlight
-      ? 'text-orange-300/75 hover:text-orange-200 font-semibold'
-      : 'text-white/45 hover:text-white'
-  }`;
-  if (to) return <Link to={to} className={base}>{children}</Link>;
-  return <a href={href} className={base}>{children}</a>;
-};
+const POLICY_SECTIONS = [
+  {
+    title: '1. Quem somos',
+    body: 'A CNHora conecta alunos, instrutores independentes e parceiros da educação no trânsito. Tratamos dados pessoais para oferecer cadastro, agendamento, comunicação, segurança, suporte e melhoria da plataforma.',
+  },
+  {
+    title: '2. Dados que podemos coletar',
+    body: 'Podemos coletar nome, contato, cidade, preferências de aula, dados de uso do app/site, mensagens enviadas ao suporte, informações de agenda e dados necessários para pagamentos, prevenção a fraude e cumprimento legal.',
+  },
+  {
+    title: '3. Como usamos seus dados',
+    body: 'Usamos dados para criar e manter sua conta, conectar alunos e instrutores, exibir disponibilidade, processar solicitações, enviar comunicações importantes, melhorar a experiência, proteger a plataforma e cumprir obrigações legais.',
+  },
+  {
+    title: '4. Compartilhamento',
+    body: 'Compartilhamos dados somente quando necessário para operar o serviço, como com instrutores, alunos, provedores de hospedagem, meios de pagamento, ferramentas de atendimento, autoridades competentes ou parceiros contratados sob dever de confidencialidade.',
+  },
+  {
+    title: '5. Segurança e retenção',
+    body: 'Adotamos medidas técnicas e organizacionais para proteger dados pessoais. Mantemos as informações pelo tempo necessário para prestar o serviço, cumprir obrigações legais, resolver disputas e preservar segurança operacional.',
+  },
+  {
+    title: '6. Seus direitos pela LGPD',
+    body: 'Você pode solicitar confirmação de tratamento, acesso, correção, anonimização, bloqueio, eliminação, portabilidade, informação sobre compartilhamento, revisão de decisões automatizadas e revogação de consentimento quando aplicável.',
+  },
+  {
+    title: '7. Cookies e tecnologias similares',
+    body: 'Podemos usar cookies e tecnologias similares para manter sessões, medir desempenho, entender navegação e melhorar funcionalidades. Você pode gerenciar permissões pelo navegador, ciente de que alguns recursos podem ser afetados.',
+  },
+  {
+    title: '8. Contato do titular',
+    body: 'Para exercer direitos ou tirar dúvidas sobre privacidade e proteção de dados, entre em contato pelo e-mail contato@cnhora.com.br. Responderemos conforme os prazos e critérios previstos na legislação aplicável.',
+  },
+];
 
-const Footer = ({ visible = true, fixed = false }) => {
+const FooterButton = ({ children, onClick }) => (
+  <button type="button" className="footer-legal-button" onClick={onClick}>
+    {children}
+  </button>
+);
+
+const Footer = () => {
+  const [isPolicyOpen, setIsPolicyOpen] = useState(false);
   const year = new Date().getFullYear();
 
+  useEffect(() => {
+    if (!isPolicyOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setIsPolicyOpen(false);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isPolicyOpen]);
+
   return (
-    <footer
-      style={{
-        background: '#000810',
-        position: fixed ? 'fixed' : 'relative',
-        bottom: fixed ? 0 : 'auto',
-        left: fixed ? 0 : 'auto',
-        right: fixed ? 0 : 'auto',
-        zIndex: fixed ? 40 : 'auto',
-        transform: fixed ? (visible ? 'translateY(0)' : 'translateY(110%)') : 'none',
-        transition: fixed ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
-        willChange: fixed ? 'transform' : 'auto',
-      }}
-      className="border-t border-white/[0.05]"
-    >
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 md:gap-8">
-
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img src={cnhoraLogo} alt="CNHora" className="h-7 w-auto" />
-              <span className="text-lg font-extrabold text-white">CNHora</span>
+    <>
+      <footer className="site-footer">
+        <div className="site-footer-inner">
+          <div className="site-footer-grid">
+            <div className="site-footer-brand">
+              <div className="site-footer-logo-row">
+                <img src={cnhoraLogo} alt="CNHora" className="site-footer-logo" />
+                <span>CN<span>Hora</span></span>
+              </div>
+              <p>
+                Acelerando o futuro da educação no trânsito através de tecnologia,
+                segurança e conexões humanas.
+              </p>
+              <div className="site-footer-socials">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <Instagram size={16} />
+                </a>
+                <a href="https://wa.me" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                  <WhatsAppIcon />
+                </a>
+                <a href="mailto:contato@cnhora.com.br" aria-label="Email">
+                  <Mail size={16} />
+                </a>
+              </div>
             </div>
-            <p className="text-sm text-white/45 leading-relaxed mb-5 max-w-[220px]">
-              Acelerando o futuro da educação no trânsito através de tecnologia e conexões humanas.
-            </p>
-            <div className="flex gap-3">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/[0.05] border border-white/[0.08] text-white/45 hover:text-[#FF7F27] hover:border-[#FF7F27]/30 transition-all"
-              >
-                <Instagram size={16} />
-              </a>
-              <a
-                href="https://wa.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/[0.05] border border-white/[0.08] text-white/45 hover:text-[#FF7F27] hover:border-[#FF7F27]/30 transition-all"
-              >
-                <WhatsAppIcon />
-              </a>
-              <a
-                href="mailto:contato@cnhora.com.br"
-                aria-label="Email"
-                className="w-9 h-9 rounded-lg flex items-center justify-center bg-white/[0.05] border border-white/[0.08] text-white/45 hover:text-[#FF7F27] hover:border-[#FF7F27]/30 transition-all"
-              >
-                <Mail size={16} />
-              </a>
+
+            <div className="site-footer-column">
+              <h4>Plataforma</h4>
+              <a href="#cta">Baixar app</a>
+              <a href="#instrutores">Para instrutores</a>
+              <a href="#cta">Começar grátis</a>
+            </div>
+
+            <div className="site-footer-column">
+              <h4>Suporte</h4>
+              <a href="mailto:contato@cnhora.com.br">Contato</a>
+              <a href="#cta">Central de ajuda</a>
+              <a href="#cta">Segurança</a>
+            </div>
+
+            <div className="site-footer-column">
+              <h4>Legal</h4>
+              <FooterButton onClick={() => setIsPolicyOpen(true)}>
+                Políticas de Privacidade e LGPD
+              </FooterButton>
+              <span className="site-footer-compliance">
+                <ShieldCheck size={14} />
+                Em conformidade com a LGPD
+              </span>
             </div>
           </div>
-
-          {/* Plataforma */}
-          <div>
-            <h4 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#FF7F27] mb-4">
-              Plataforma
-            </h4>
-            <ul className="space-y-3">
-              <li><FooterLink href="#">Sobre nós</FooterLink></li>
-              <li><FooterLink href="#">Instrutores</FooterLink></li>
-              <li><FooterLink href="#">Autoescolas</FooterLink></li>
-            </ul>
-          </div>
-
-          {/* Suporte */}
-          <div>
-            <h4 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#FF7F27] mb-4">
-              Suporte
-            </h4>
-            <ul className="space-y-3">
-              <li><FooterLink href="#">Central de Ajuda</FooterLink></li>
-              <li><FooterLink href="#">Suporte 24h</FooterLink></li>
-              <li><FooterLink href="#">Contato</FooterLink></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#FF7F27] mb-4">
-              Legal
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <FooterLink to="/privacidade" highlight>
-                  Política de Privacidade
-                </FooterLink>
-              </li>
-              <li>
-                <FooterLink to="/lgpd" highlight>
-                  LGPD{' '}
-                  <span className="inline-block text-[8px] font-bold tracking-wider uppercase bg-[#FF7F27]/15 border border-[#FF7F27]/30 text-[#FF7F27] rounded px-1 py-px align-middle ml-1">
-                    Lei
-                  </span>
-                </FooterLink>
-              </li>
-              <li><FooterLink to="/termos">Termos de Uso</FooterLink></li>
-              <li><FooterLink href="#">Segurança</FooterLink></li>
-            </ul>
-          </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/[0.06]">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center md:justify-between gap-3 text-center md:text-left">
-        <p className="text-xs text-white/30">
-          © {year} CNHora. Todos os direitos reservados.
-        </p>
-        <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 md:gap-5">
-          <Link to="/privacidade" className="text-xs text-orange-300/50 hover:text-orange-300/80 transition-colors">
-            Privacidade
-          </Link>
-          <Link to="/lgpd" className="text-xs text-orange-300/50 hover:text-orange-300/80 transition-colors">
-            LGPD
-          </Link>
-          <Link to="/termos" className="text-xs text-white/30 hover:text-white/60 transition-colors">
-            Termos
-          </Link>
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-wide bg-green-500/[0.08] border border-green-500/20 text-green-400/75 rounded px-2 py-1">
-            ✓ Em conformidade com a LGPD
-          </span>
+        <div className="site-footer-bottom">
+          <p>© {year} CNHora. Todos os direitos reservados.</p>
+          <button type="button" onClick={() => setIsPolicyOpen(true)}>
+            Privacidade e LGPD
+          </button>
         </div>
-      </div>
-      </div>
-    </footer>
+      </footer>
+
+      {isPolicyOpen && (
+        <div className="policy-modal-backdrop" role="presentation" onMouseDown={() => setIsPolicyOpen(false)}>
+          <section
+            className="policy-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="policy-modal-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <header className="policy-modal-header">
+              <div>
+                <span className="policy-modal-kicker">Privacidade e LGPD</span>
+                <h2 id="policy-modal-title">Políticas da CNHora</h2>
+                <p>Última atualização: {year}</p>
+              </div>
+              <button type="button" className="policy-modal-close" onClick={() => setIsPolicyOpen(false)} aria-label="Fechar modal">
+                <X size={20} />
+              </button>
+            </header>
+
+            <div className="policy-modal-body">
+              <p className="policy-modal-intro">
+                Esta política explica, de forma objetiva, como a CNHora trata dados pessoais
+                na operação da plataforma, conforme a Lei Geral de Proteção de Dados.
+              </p>
+
+              <div className="policy-modal-sections">
+                {POLICY_SECTIONS.map((section) => (
+                  <article key={section.title}>
+                    <h3>{section.title}</h3>
+                    <p>{section.body}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+    </>
   );
 };
 

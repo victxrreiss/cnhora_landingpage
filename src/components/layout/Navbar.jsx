@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import cnhoraLogo from '/cnhora-logo.svg';
+import { useDevicePerformance } from '../../hooks';
 
 const navLinks = [
   { name: 'Como funciona', href: '#manifesto' },
@@ -9,8 +10,10 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const { animationLevel } = useDevicePerformance();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const shouldAnimate = animationLevel === 'full';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -29,8 +32,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
         {/* Logo */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={shouldAnimate ? { opacity: 0, x: -20 } : false}
+          animate={shouldAnimate ? { opacity: 1, x: 0 } : undefined}
           className="flex items-center gap-2.5"
         >
           <img src={cnhoraLogo} alt="CNHora Logo" className="h-7 w-auto" />
@@ -48,9 +51,9 @@ const Navbar = () => {
             <motion.a
               key={link.name}
               href={link.href}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              initial={shouldAnimate ? { opacity: 0, y: -10 } : false}
+              animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
+              transition={shouldAnimate ? { delay: i * 0.1 } : undefined}
               className="text-sm font-medium transition-colors duration-200"
               style={{ color: 'rgba(200,220,255,0.7)' }}
               onMouseEnter={e => (e.target.style.color = 'white')}
@@ -62,10 +65,10 @@ const Navbar = () => {
 
           <motion.a
             href="#cta"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            whileTap={{ scale: 0.97 }}
+            initial={shouldAnimate ? { opacity: 0, y: -10 } : false}
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
+            transition={shouldAnimate ? { delay: 0.3 } : undefined}
+            whileTap={shouldAnimate ? { scale: 0.97 } : undefined}
             className="btn-nav-primary"
           >
             Começar grátis

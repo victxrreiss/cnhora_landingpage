@@ -477,6 +477,12 @@ const Hero = () => {
             });
           }
         },
+        onLeave: () => {
+          gsap.set(hero, { height: 0 });
+        },
+        onEnterBack: () => {
+          gsap.set(hero, { height: '100vh' });
+        },
       },
     });
 

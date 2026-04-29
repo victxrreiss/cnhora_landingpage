@@ -1,4 +1,4 @@
-name: Telegram Commit Notify
+name: Telegram Commit Notify - Landing Page
 
 on:
   push:
@@ -21,20 +21,25 @@ jobs:
           BRANCH: ${{ github.ref_name }}
           COMPARE_URL: ${{ github.event.compare }}
           PUSHER: ${{ github.event.pusher.name }}
-          REPO: ${{ github.repository }}
         run: |
           if [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]]; then
             echo "Secrets não configurados - pulando notificação."
             exit 0
           fi
 
-          # Instala o jq (garantia extra, mesmo que geralmente já venha instalado)
+          # Instala jq se necessário
           sudo apt-get update -qq && sudo apt-get install -y jq
 
-          COUNT=$(echo "$COMMITS_JSON" | jq 'length')
+          # Proteção contra JSON nulo ou inválido
+          if [[ -z "$COMMITS_JSON" || "$COMMITS_JSON" == "null" ]]; then
+            echo "github.event.commits veio como null - pulando notificação."
+            exit 0
+          fi
+
+          COUNT=$(echo "$COMMITS_JSON" | jq -r 'length // 0')
 
           if [[ "$COUNT" -eq 0 ]]; then
-            echo "Nenhum commit no payload - pulando."
+            echo "Nenhum commit encontrado - pulando."
             exit 0
           fi
 
@@ -43,13 +48,14 @@ jobs:
           }
 
           if [[ "$COUNT" -eq 1 ]]; then
-            # ==================== UM COMMIT ====================
+            # ==================== ÚNICO COMMIT ====================
             COMMIT=$(echo "$COMMITS_JSON" | jq -c '.[0]')
-            RAW_MSG=$(echo "$COMMIT" | jq -r '.message' | head -c 500)
-            RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
-            COMMIT_URL=$(echo "$COMMIT" | jq -r '.url')
+            RAW_MSG=$(echo "$COMMIT" | jq -r '.message // ""' | head -c 500)
+            RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name // "Unknown"')
+            COMMIT_URL=$(echo "$COMMIT" | jq -r '.url // ""')
             FILE_COUNT=$(echo "$COMMIT" | jq '(.added + .removed + .modified) | length')
-            FILES=$(echo "$COMMIT" | jq -r '(.added + .removed + .modified) | .[]' | head -3 | sed 's|.*/||' | tr '\n' ' ' | sed 's/ $//')
+
+            FILES=$(echo "$COMMIT" | jq -r '(.added + .removed + .modified) | .[]?' | head -3 | sed 's|.*/||' | tr '\n' ' ' | sed 's/ $//')
 
             MSG=$(escape_html "$RAW_MSG")
             AUTHOR=$(escape_html "$RAW_AUTHOR")
@@ -76,37 +82,4 @@ jobs:
 
             for i in $(seq 0 $((SHOWN - 1))); do
               COMMIT=$(echo "$COMMITS_JSON" | jq -c ".[$i]")
-              RAW_LINE=$(echo "$COMMIT" | jq -r '.message' | head -c 300)
-              RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
-              LINE=$(escape_html "$RAW_LINE")
-              AUTHOR=$(escape_html "$RAW_AUTHOR")
-              LINES=$(printf '%s&#8226; %s <i>(%s)</i>\n' "$LINES" "$LINE" "$AUTHOR")
-            done
-
-            if [[ "$COUNT" -gt "$MAX" ]]; then
-              LINES=$(printf '%s&#8226; <i>... e mais %d commits</i>\n' "$LINES" "$((COUNT - MAX))")
-            fi
-
-            BRANCH_ESC=$(escape_html "$BRANCH")
-            PUSHER_ESC=$(escape_html "$PUSHER")
-
-            TEXT=$(printf '&#128276; <b>CNHora Landing Page — %d commits na %s</b>\n&#128100; <b>Pusher:</b> %s\n\n%s\n\n🔗 <a href="%s">Ver todos os commits</a>' \
-              "$COUNT" "$BRANCH_ESC" "$PUSHER_ESC" "$LINES" "$COMPARE_URL")
-          fi
-
-          # Envia para o Telegram
-          RESPONSE=$(curl -sf -X POST \
-            "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-            -H "Content-Type: application/json" \
-            -d "$(jq -n \
-              --arg chat_id "$CHAT_ID" \
-              --arg text "$TEXT" \
-              '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')")
-
-          if echo "$RESPONSE" | jq -e '.ok == true' > /dev/null 2>&1; then
-            echo "✅ Notificação enviada com sucesso."
-          else
-            echo "❌ Falha ao enviar notificação."
-            echo "Resposta: $RESPONSE"
-            exit 1
-          fi
+              RAW_LINE=$(echo "$COMMIT" | jq -r '.message // ""

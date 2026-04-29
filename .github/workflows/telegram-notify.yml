@@ -1,18 +1,3 @@
-name: Telegram Commit Notify - Landing Page
-
-on:
-  push:
-    branches:
-      - dev
-      - main
-
-jobs:
-  notify:
-    name: Notificar equipe no Telegram
-    runs-on: ubuntu-latest
-    continue-on-error: true
-
-    steps:
       - name: Teste mínimo de envio para Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -20,21 +5,26 @@ jobs:
         run: |
           echo "Iniciando teste mínimo..."
 
+          # Monta o JSON usando jq (mais seguro)
+          JSON=$(jq -n \
+            --arg chat_id "$CHAT_ID" \
+            --arg text "Teste mínimo do GitHub Actions - Landing Page\n\nFuncionou! ✅" \
+            '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')
+
           RESPONSE=$(curl -s -w "%{http_code}" -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "{\"chat_id\": \"${CHAT_ID}\", \"text\": \"Teste mínimo do GitHub Actions - Landing Page\n\nFuncionou! ✅\", \"parse_mode\": \"HTML\", \"disable_web_page_preview\": true}")
+            -d "$JSON")
 
           HTTP_CODE=${RESPONSE: -3}
           BODY=${RESPONSE:0:-3}
 
           echo "HTTP Status: $HTTP_CODE"
-          echo "Resposta: $BODY"
+          echo "Resposta completa: $BODY"
 
           if [[ "$HTTP_CODE" == "200" ]]; then
             echo "✅ Mensagem enviada com sucesso!"
           else
             echo "❌ Falha no envio"
-            echo "Resposta completa: $BODY"
             exit 1
           fi

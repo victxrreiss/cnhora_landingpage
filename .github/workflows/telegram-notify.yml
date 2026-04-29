@@ -1,3 +1,18 @@
+name: Telegram Commit Notify - Landing Page
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  notify:
+    name: Notificar equipe no Telegram
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
       - name: Teste mínimo de envio para Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -5,7 +20,7 @@
         run: |
           echo "Iniciando teste mínimo..."
 
-          # Monta o JSON usando jq (mais seguro)
+          # Monta o JSON de forma segura usando jq
           JSON=$(jq -n \
             --arg chat_id "$CHAT_ID" \
             --arg text "Teste mínimo do GitHub Actions - Landing Page\n\nFuncionou! ✅" \
@@ -26,5 +41,6 @@
             echo "✅ Mensagem enviada com sucesso!"
           else
             echo "❌ Falha no envio"
+            echo "Resposta completa: $BODY"
             exit 1
           fi

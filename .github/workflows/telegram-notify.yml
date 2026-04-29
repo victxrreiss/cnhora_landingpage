@@ -18,34 +18,41 @@ jobs:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          echo "Iniciando teste mínimo..."
-          
-          # Check if jq is available
-          if ! command -v jq &> /dev/null; then
-            echo "❌ jq is not installed"
-            exit 1
-          fi
-          
-          # Monta o JSON de forma segura usando jq
+          echo "=== DEBUG TELEGRAM WORKFLOW ==="
+          echo "BOT_TOKEN length: ${#BOT_TOKEN} caracteres"
+          echo "CHAT_ID: $CHAT_ID"
+          echo "=============================="
+
+          echo "Instalando jq..."
+          sudo apt-get update -qq && sudo apt-get install -y jq
+
+          echo "jq instalado. Versão: $(jq --version)"
+
+          echo "Montando JSON..."
           JSON=$(jq -n \
             --arg chat_id "$CHAT_ID" \
-            --arg text "Teste mínimo do GitHub Actions - Landing Page\n\nFuncionou! ✅" \
+            --arg text "Teste do GitHub Actions - Landing Page" \
             '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')
-          
-          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+
+          echo "JSON montado com sucesso."
+          echo "Enviando requisição para Telegram..."
+
+          RESPONSE=$(curl -v -s -w "\nHTTP_CODE:%{http_code}" -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "$JSON")
-          
-          # Extract HTTP code (last line) and body (all but last line)
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | head -n-1)
-          
+            -d "$JSON" 2>&1)
+
+          echo "=== RESPOSTA DO CURL ==="
+          echo "$RESPONSE"
+
+          HTTP_CODE=$(echo "$RESPONSE" | grep -o 'HTTP_CODE:[0-9]*' | cut -d: -f2)
+          BODY=$(echo "$RESPONSE" | sed 's/HTTP_CODE:[0-9]*//')
+
           echo "HTTP Status: $HTTP_CODE"
-          echo "Resposta: $BODY"
-          
+          echo "Body: $BODY"
+
           if [[ "$HTTP_CODE" == "200" ]]; then
-            echo "✅ Mensagem enviada com sucesso!"
+            echo "✅ Sucesso! Mensagem enviada."
           else
             echo "❌ Falha no envio"
             exit 1

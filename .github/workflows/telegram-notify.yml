@@ -13,7 +13,7 @@ jobs:
     continue-on-error: true
 
     steps:
-          - name: Teste mínimo de envio para Telegram
+      - name: Teste mínimo de envio para Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -35,5 +35,6 @@ jobs:
             echo "✅ Mensagem enviada com sucesso!"
           else
             echo "❌ Falha no envio"
+            echo "Resposta completa: $BODY"
             exit 1
           fi

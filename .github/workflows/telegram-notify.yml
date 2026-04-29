@@ -13,30 +13,30 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: Teste mínimo Telegram
+      - name: Teste Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          echo "=== DEBUG TELEGRAM ==="
-          echo "BOT_TOKEN length : ${#BOT_TOKEN}"
-          echo "CHAT_ID           : '$CHAT_ID'"
-          echo "======================"
+          echo "=== DEBUG TELEGRAM LANDING PAGE ==="
+          echo "Token length : ${#BOT_TOKEN}"
+          echo "Chat ID      : $CHAT_ID"
+          echo "==================================="
 
           sudo apt-get update -qq && sudo apt-get install -y jq
 
-          echo "Montando JSON..."
+          # Monta o JSON
           JSON=$(jq -n \
             --arg chat_id "$CHAT_ID" \
-            --arg text "Teste mínimo - Landing Page" \
+            --arg text "Teste do repositório Landing Page" \
             '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')
 
-          echo "JSON montado. Enviando curl..."
+          echo "Enviando mensagem para o Telegram..."
 
-          # Curl com máximo de debug possível
-          curl -v -X POST \
+          # Forma MAIS SEGURA de chamar a API
+          curl -v -s -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "$JSON"
+            -d "$JSON" || echo "Curl falhou com código: $?"
 
-          echo "Curl finalizado com código: $?"
+          echo "Script finalizado."

@@ -13,11 +13,13 @@ jobs:
     continue-on-error: true
 
     steps:
+      - name: Salvar commits em arquivo
+        run: echo '${{ toJson(github.event.commits) }}' > /tmp/commits.json
+
       - name: Enviar notificação no Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          COMMITS_JSON: ${{ toJson(github.event.commits) }}
           BRANCH: ${{ github.ref_name }}
           COMPARE_URL: ${{ github.event.compare }}
           PUSHER: ${{ github.event.pusher.name }}
@@ -28,25 +30,23 @@ jobs:
             exit 0
           fi
 
-          escape_html() {
-            printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
-          }
-
-          COUNT=$(echo "$COMMITS_JSON" | jq 'length')
+          COUNT=$(jq 'length' /tmp/commits.json)
 
           if [[ "$COUNT" -eq 0 ]]; then
             echo "Nenhum commit no payload - pulando."
             exit 0
           fi
 
+          escape_html() {
+            printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
+          }
+
           if [[ "$COUNT" -eq 1 ]]; then
-            # ==================== UM ÚNICO COMMIT ====================
-            COMMIT=$(echo "$COMMITS_JSON" | jq -c '.[0]')
+            COMMIT=$(jq -c '.[0]' /tmp/commits.json)
             RAW_MSG=$(echo "$COMMIT" | jq -r '.message' | head -c 500 | head -1)
             RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
             COMMIT_URL=$(echo "$COMMIT" | jq -r '.url')
             FILE_COUNT=$(echo "$COMMIT" | jq '(.added + .removed + .modified) | length')
-
             FILES=$(echo "$COMMIT" | jq -r '(.added + .removed + .modified) | .[]' | head -3 | sed 's|.*/||' | tr '\n' ' ' | sed 's/ $//')
 
             MSG=$(escape_html "$RAW_MSG")
@@ -67,13 +67,12 @@ jobs:
               "$BRANCH_ESC" "$AUTHOR" "$MSG" "$FILES_LINE" "$COMMIT_URL")
 
           else
-            # ==================== MÚLTIPLOS COMMITS ====================
             MAX=5
             SHOWN=$(( COUNT < MAX ? COUNT : MAX ))
             LINES=""
 
             for i in $(seq 0 $((SHOWN - 1))); do
-              COMMIT=$(echo "$COMMITS_JSON" | jq -c ".[$i]")
+              COMMIT=$(jq -c ".[$i]" /tmp/commits.json)
               RAW_LINE=$(echo "$COMMIT" | jq -r '.message' | head -c 300 | head -1)
               RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
               LINE=$(escape_html "$RAW_LINE")
@@ -92,7 +91,6 @@ jobs:
               "$COUNT" "$BRANCH_ESC" "$PUSHER_ESC" "$LINES" "$COMPARE_URL")
           fi
 
-          # Envia a mensagem para o Telegram
           RESPONSE=$(curl -sf -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
@@ -102,7 +100,7 @@ jobs:
               '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')")
 
           if echo "$RESPONSE" | jq -e '.ok == true' > /dev/null 2>&1; then
-            echo "✅ Notificação enviada com sucesso para o canal."
+            echo "✅ Notificação enviada com sucesso."
           else
             echo "❌ Falha ao enviar notificação."
             echo "Resposta: $RESPONSE"

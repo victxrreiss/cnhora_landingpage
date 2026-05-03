@@ -1304,6 +1304,18 @@ body {
   background: rgba(255, 255, 255, 0.14);
 }
 
+/* WhatsApp contact button — mobile CTA only */
+.cta-btn-whatsapp {
+  background: rgba(37, 211, 102, 0.12);
+  color: #fff;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+}
+
+.cta-btn-whatsapp:hover {
+  background: rgba(37, 211, 102, 0.22);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.2);
+}
+
 /* ── Screen content layout ── */
 
 .screen-app-bar {
@@ -2086,9 +2098,20 @@ html.perf-static .cta-download-section {
 /* ===== VERTICAL HERO FLOW ===== */
 .hero-vertical-flow {
   width: 100%;
-  gap: clamp(0.35rem, 1.5vw, 1.25rem);
-  padding-bottom: clamp(3rem, 7vw, 6rem);
+  gap: 0;
+  padding-bottom: 0;
   overflow-x: hidden !important;
+}
+
+.hero-vertical-flow .mobile-full-screen {
+  min-height: 100svh !important;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4.5rem;
+  padding-bottom: 2rem;
 }
 
 .hero-vertical-flow .hero-content-wrapper {
@@ -2120,8 +2143,8 @@ html.perf-static .cta-download-section {
   width: min(100%, 860px) !important;
   height: auto !important;
   min-height: clamp(290px, 42vh, 430px) !important;
-  padding: clamp(5.25rem, 10vh, 7rem) 0 0 !important;
-  margin: 0 auto !important;
+  padding: 0 !important;
+  margin: 2.5rem auto 0 !important;
   z-index: 25 !important;
   order: 0 !important;
   align-items: center !important;
@@ -2155,7 +2178,7 @@ html.perf-static .cta-download-section {
   height: auto !important;
   opacity: 1 !important;
   pointer-events: auto !important;
-  padding: clamp(2rem, 6vw, 4rem) 1rem !important;
+  padding: 0 1rem !important;
   margin: 0 auto !important;
   gap: 1.5rem !important;
   z-index: 25;
@@ -2181,7 +2204,7 @@ html.perf-static .cta-download-section {
   opacity: 1 !important;
   pointer-events: auto !important;
   width: min(100%, 1120px) !important;
-  padding: clamp(2.5rem, 7vw, 5rem) 1rem 1rem !important;
+  padding: clamp(5rem, 12vh, 8rem) 1rem 2rem !important;
   margin: 0 auto !important;
   z-index: 25;
   order: 3 !important;
@@ -2261,18 +2284,13 @@ html.perf-static .cta-download-section {
   opacity: 1 !important;
   pointer-events: auto !important;
   width: min(100%, 860px);
-  min-height: auto !important;
-  padding: clamp(2.5rem, 7vw, 5rem) 1rem 0 !important;
+  padding: 0 1rem !important;
   margin: 0 auto;
   z-index: 20;
   order: 4 !important;
 }
 
 @media (max-width: 640px) {
-  .hero-vertical-flow {
-    gap: 1rem;
-  }
-
   .hero-vertical-flow .hero-content-wrapper {
     width: 92% !important;
     padding-top: 0 !important;
@@ -2280,7 +2298,7 @@ html.perf-static .cta-download-section {
 
   .hero-vertical-flow .hero-animation-group {
     min-height: 250px !important;
-    padding-top: 5.75rem !important;
+    padding-top: 0 !important;
   }
 
   .hero-vertical-flow .hero-feature-card {
@@ -2300,6 +2318,47 @@ html.perf-static .cta-download-section {
   .hero-vertical-flow .showcase-mobile-cards {
     display: grid !important;
   }
+}
+
+/* ===== PERF-STATIC + MOBILE FLOW: override perf-static desktop defaults ===== */
+/* Specificity 0-3-1 beats html.perf-static rules at 0-2-1 */
+
+html.perf-static .hero-vertical-flow .mobile-full-screen {
+  min-height: 100svh !important;
+}
+
+html.perf-static .hero-vertical-flow .hero-animation-group {
+  padding: 0 !important;
+  margin: 2.5rem auto 0 !important;
+  min-height: clamp(290px, 42vh, 430px) !important;
+}
+
+@media (max-width: 640px) {
+  html.perf-static .hero-vertical-flow .hero-animation-group {
+    min-height: 250px !important;
+    padding-top: 0 !important;
+  }
+}
+
+html.perf-static .hero-vertical-flow .logo-container {
+  width: min(64vw, 300px) !important;
+  height: min(64vw, 300px) !important;
+}
+
+html.perf-static .hero-vertical-flow .hero-content-wrapper {
+  padding: 0 0 clamp(1rem, 3vw, 2rem) !important;
+}
+
+html.perf-static .hero-vertical-flow .hero-cards-container {
+  padding: 0 1rem !important;
+}
+
+html.perf-static .hero-vertical-flow .showcase-in-hero {
+  padding: clamp(5rem, 12vh, 8rem) 1rem 2rem !important;
+}
+
+html.perf-static .hero-vertical-flow .cta-download-section {
+  padding: 0 1rem !important;
 }
 
 /* ===== DESKTOP STATIC: absolute overlays become normal flow below the spacer ===== */
@@ -2852,9 +2911,8 @@ html.perf-static .hero-static-desktop .hero-feature-card {
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-  .whatsapp-sign {
-    width: 60px;
-    height: 60px;
+@media (max-width: 1024px) {
+  .whatsapp-sign-wrapper {
+    display: none;
   }
 }

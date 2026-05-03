@@ -806,51 +806,253 @@ const Hero = () => {
         {/* Ambient light */}
         <div className="ambient-light" style={{ zIndex: 2 }} />
 
-        {/* Perspective grid */}
-        {!isStaticDesktop && <PerspectiveGrid ref={gridRef} />}
+        {/* Perspective grid — desktop only; on mobile it would bleed into the footer */}
+        {!isStaticDesktop && !useColumnLayout && <PerspectiveGrid ref={gridRef} />}
 
-        {/* Animation Group (Logo + Rings) - Positioned Right */}
-        <div ref={animGroupRef} className="hero-animation-group">
-          {/* Logo container - relative centered in group (rings moved inside to ensure perfect centering) */}
-          <div className="logo-container">
-            {/* Orbital rings - absolute centered in container */}
-            <div
-              ref={ring1Ref}
-              className="orbital-ring ring-1"
-              style={{ width: 380, height: 360, border: '1px solid rgba(255,107,0,0.25)', zIndex: 15 }}
-            />
-            <div
-              ref={ring2Ref}
-              className="orbital-ring ring-2"
-              style={{ width: 460, height: 440, border: '1px solid rgba(0,102,204,0.25)', zIndex: 15 }}
-            />
-            <div
-              ref={ring3Ref}
-              className="orbital-ring ring-3"
-              style={{ width: 540, height: 520, border: '1px solid rgba(255,107,0,0.12)', zIndex: 15 }}
-            />
+        {/* NOTE: mobile/desktop branches share identical inner content — apply any content change in BOTH. */}
+        {useColumnLayout ? (
+          <div className="mobile-full-screen" style={{ order: 0, width: '100%' }}>
+            {/* Animation Group (Logo + Rings) */}
+            <div ref={animGroupRef} className="hero-animation-group">
+              {/* Logo container - relative centered in group (rings moved inside to ensure perfect centering) */}
+              <div className="logo-container">
+                {/* Orbital rings - absolute centered in container */}
+                <div
+                  ref={ring1Ref}
+                  className="orbital-ring ring-1"
+                  style={{ width: 380, height: 360, border: '1px solid rgba(255,107,0,0.25)', zIndex: 15 }}
+                />
+                <div
+                  ref={ring2Ref}
+                  className="orbital-ring ring-2"
+                  style={{ width: 460, height: 440, border: '1px solid rgba(0,102,204,0.25)', zIndex: 15 }}
+                />
+                <div
+                  ref={ring3Ref}
+                  className="orbital-ring ring-3"
+                  style={{ width: 540, height: 520, border: '1px solid rgba(255,107,0,0.12)', zIndex: 15 }}
+                />
 
-            <div
-              ref={logoRef}
-              style={{
-                width: 280, height: 280,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                filter: 'drop-shadow(0 0 35px rgba(255,107,0,0.45)) drop-shadow(0 0 70px rgba(0,100,255,0.25))',
-                zIndex: 20,
-              }}
-            >
-              <img
-                src={cnhoraLogo}
-                alt="CNHora"
-                className="logo-glow-anim"
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              />
+                <div
+                  ref={logoRef}
+                  style={{
+                    width: 280, height: 280,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    filter: 'drop-shadow(0 0 35px rgba(255,107,0,0.45)) drop-shadow(0 0 70px rgba(0,100,255,0.25))',
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={cnhoraLogo}
+                    alt="CNHora"
+                    className="logo-glow-anim"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Hero text */}
+            <div ref={finalRef} className="hero-content-wrapper">
+              {/* Badge */}
+              <div className="hero-badge">
+                <span className="dot" />
+                O marketplace da educação no trânsito
+              </div>
+
+              {/* Title */}
+              <h1 className="hero-title">
+                Seu tempo.<br />
+                <span className="highlight">Sua direção.</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="hero-subtitle">
+                Conectamos alunos a instrutores independentes com tecnologia de ponta.
+                Agende aulas, faça simulados e conquiste sua CNH sem burocracia.
+              </p>
+
+              {/* Stats */}
+              <div className="stats-row">
+                <div className="stat-item">
+                  <div className="stat-number">+12k</div>
+                  <div className="stat-label">Alunos aprovados</div>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <div className="stat-number">+800</div>
+                  <div className="stat-label">Instrutores ativos</div>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <div className="stat-number">4.9★</div>
+                  <div className="stat-label">Avaliação média</div>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="btn-cta-group">
+                <a href="#cta" className="btn-primary" onClick={(e) => { e.preventDefault(); goToCards('aluno'); }}>
+                  Sou Aluno
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+                <a href="#instrutores" className="btn-secondary" onClick={(e) => { e.preventDefault(); goToCards('instrutor'); }}>
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Sou Instrutor
+                </a>
+                <button className="btn-download">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Baixar App
+                </button>
+              </div>
+
+              {/* Trust badges */}
+              <div className="trust-badges">
+                <div className="trust-badge">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  LGPD Compliant
+                </div>
+                <div className="trust-badge">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Pagamento Seguro
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Animation Group (Logo + Rings) - Positioned Right */}
+            <div ref={animGroupRef} className="hero-animation-group">
+              {/* Logo container - relative centered in group (rings moved inside to ensure perfect centering) */}
+              <div className="logo-container">
+                {/* Orbital rings - absolute centered in container */}
+                <div
+                  ref={ring1Ref}
+                  className="orbital-ring ring-1"
+                  style={{ width: 380, height: 360, border: '1px solid rgba(255,107,0,0.25)', zIndex: 15 }}
+                />
+                <div
+                  ref={ring2Ref}
+                  className="orbital-ring ring-2"
+                  style={{ width: 460, height: 440, border: '1px solid rgba(0,102,204,0.25)', zIndex: 15 }}
+                />
+                <div
+                  ref={ring3Ref}
+                  className="orbital-ring ring-3"
+                  style={{ width: 540, height: 520, border: '1px solid rgba(255,107,0,0.12)', zIndex: 15 }}
+                />
+
+                <div
+                  ref={logoRef}
+                  style={{
+                    width: 280, height: 280,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    filter: 'drop-shadow(0 0 35px rgba(255,107,0,0.45)) drop-shadow(0 0 70px rgba(0,100,255,0.25))',
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={cnhoraLogo}
+                    alt="CNHora"
+                    className="logo-glow-anim"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Main hero content - Positioned Left */}
+            <div ref={finalRef} className="hero-content-wrapper" style={{ order: 1 }}>
+              {/* Badge */}
+              <div className="hero-badge">
+                <span className="dot" />
+                O marketplace da educação no trânsito
+              </div>
+
+              {/* Title */}
+              <h1 className="hero-title">
+                Seu tempo.<br />
+                <span className="highlight">Sua direção.</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="hero-subtitle">
+                Conectamos alunos a instrutores independentes com tecnologia de ponta.
+                Agende aulas, faça simulados e conquiste sua CNH sem burocracia.
+              </p>
+
+              {/* Stats */}
+              <div className="stats-row">
+                <div className="stat-item">
+                  <div className="stat-number">+12k</div>
+                  <div className="stat-label">Alunos aprovados</div>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <div className="stat-number">+800</div>
+                  <div className="stat-label">Instrutores ativos</div>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <div className="stat-number">4.9★</div>
+                  <div className="stat-label">Avaliação média</div>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="btn-cta-group">
+                <a href="#cta" className="btn-primary" onClick={(e) => { e.preventDefault(); goToCards('aluno'); }}>
+                  Sou Aluno
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+                <a href="#instrutores" className="btn-secondary" onClick={(e) => { e.preventDefault(); goToCards('instrutor'); }}>
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Sou Instrutor
+                </a>
+                <button className="btn-download">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Baixar App
+                </button>
+              </div>
+
+              {/* Trust badges */}
+              <div className="trust-badges">
+                <div className="trust-badge">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  LGPD Compliant
+                </div>
+                <div className="trust-badge">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Pagamento Seguro
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Features section — tab switcher + cards */}
-        <div style={{ order: useColumnLayout ? 2 : undefined, width: useColumnLayout ? '100%' : undefined }}>
+        <div
+          className={useColumnLayout ? 'mobile-full-screen' : undefined}
+          style={{ order: useColumnLayout ? 2 : undefined, width: useColumnLayout ? '100%' : undefined }}
+        >
           <Features
             ref={cardsContainerRef}
             activeTab={activeTab}
@@ -860,7 +1062,11 @@ const Hero = () => {
         </div>
 
         {/* AppShowcase — animated in by Hero timeline */}
-        <div ref={showcaseRef} className="showcase-in-hero" style={{ order: useColumnLayout ? 3 : undefined }}>
+        <div
+          ref={showcaseRef}
+          className={`showcase-in-hero${useColumnLayout ? ' mobile-full-screen' : ''}`}
+          style={{ order: useColumnLayout ? 3 : undefined }}
+        >
           <div className="showcase-header">
             <h2>O app que <span className="highlight">trabalha</span> por você</h2>
             <p>Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.</p>
@@ -982,7 +1188,11 @@ const Hero = () => {
         </div>
 
         {/* CTA Download Section — animated in after AppShowcase */}
-        <div ref={ctaRef} className="cta-download-section" style={{ order: useColumnLayout ? 4 : undefined }}>
+        <div
+          ref={ctaRef}
+          className={`cta-download-section${useColumnLayout ? ' mobile-full-screen' : ''}`}
+          style={{ order: useColumnLayout ? 4 : undefined }}
+        >
 
           {/* Animated logo with orbital rings */}
           <div ref={ctaLogoRef} className="cta-logo-wrapper">
@@ -1040,6 +1250,19 @@ const Hero = () => {
               </svg>
               Baixar na Apple Store
             </a>
+            {useColumnLayout && (
+              <a
+                href="https://wa.me/5511999999999"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-btn cta-btn-whatsapp"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+                Contato
+              </a>
+            )}
           </div>
 
         </div>
@@ -1051,83 +1274,6 @@ const Hero = () => {
           style={{ order: useColumnLayout ? 5 : undefined }}
         >
           <Footer />
-        </div>
-
-        {/* Main hero content - Positioned Left */}
-        <div ref={finalRef} className="hero-content-wrapper" style={{ order: useColumnLayout ? 1 : undefined }}>
-          {/* Badge */}
-          <div className="hero-badge">
-            <span className="dot" />
-            O marketplace da educação no trânsito
-          </div>
-
-          {/* Title */}
-          <h1 className="hero-title">
-            Seu tempo.<br />
-            <span className="highlight">Sua direção.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="hero-subtitle">
-            Conectamos alunos a instrutores independentes com tecnologia de ponta.
-            Agende aulas, faça simulados e conquiste sua CNH sem burocracia.
-          </p>
-
-          {/* Stats */}
-          <div className="stats-row">
-            <div className="stat-item">
-              <div className="stat-number">+12k</div>
-              <div className="stat-label">Alunos aprovados</div>
-            </div>
-            <div className="stat-divider" />
-            <div className="stat-item">
-              <div className="stat-number">+800</div>
-              <div className="stat-label">Instrutores ativos</div>
-            </div>
-            <div className="stat-divider" />
-            <div className="stat-item">
-              <div className="stat-number">4.9★</div>
-              <div className="stat-label">Avaliação média</div>
-            </div>
-          </div>
-
-          {/* CTAs */}
-          <div className="btn-cta-group">
-            <a href="#cta" className="btn-primary" onClick={(e) => { e.preventDefault(); goToCards('aluno'); }}>
-              Sou Aluno
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
-            <a href="#instrutores" className="btn-secondary" onClick={(e) => { e.preventDefault(); goToCards('instrutor'); }}>
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              Sou Instrutor
-            </a>
-            <button className="btn-download">
-              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Baixar App
-            </button>
-          </div>
-
-          {/* Trust badges */}
-          <div className="trust-badges">
-            <div className="trust-badge">
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              LGPD Compliant
-            </div>
-            <div className="trust-badge">
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              Pagamento Seguro
-            </div>
-          </div>
         </div>
 
         {/* Scroll indicator — full/reduced desktop only (static uses the one inside the spacer) */}

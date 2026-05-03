@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -10,6 +10,13 @@ import LGPD from './pages/LGPD';
 import Termos from './pages/Termos';
 
 function App() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+  const [footerVisible, setFooterVisible] = useState(!isHome);
+
+  const handlePinEnd = useCallback(() => setFooterVisible(true), []);
+  const handlePinEnterBack = useCallback(() => setFooterVisible(false), []);
+
   return (
     <div className="dark" style={{ background: '#000810' }}>
       <Helmet>
@@ -27,7 +34,7 @@ function App() {
           path="/"
           element={
             <ErrorBoundary>
-              <Hero />
+              <Hero onPinEnd={handlePinEnd} onPinEnterBack={handlePinEnterBack} />
             </ErrorBoundary>
           }
         />
@@ -36,7 +43,7 @@ function App() {
         <Route path="/termos" element={<ErrorBoundary><Termos /></ErrorBoundary>} />
       </Routes>
 
-      <Footer />
+      <Footer visible={footerVisible} fixed={isHome} />
     </div>
   );
 }

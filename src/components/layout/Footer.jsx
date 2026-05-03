@@ -19,11 +19,24 @@ const FooterLink = ({ to, href, children, highlight = false }) => {
   return <a href={href} className={base}>{children}</a>;
 };
 
-const Footer = () => {
+const Footer = ({ visible = true, fixed = false }) => {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{ background: '#000810' }} className="border-t border-white/[0.05]">
+    <footer
+      style={{
+        background: '#000810',
+        position: fixed ? 'fixed' : 'relative',
+        bottom: fixed ? 0 : 'auto',
+        left: fixed ? 0 : 'auto',
+        right: fixed ? 0 : 'auto',
+        zIndex: fixed ? 40 : 'auto',
+        transform: fixed ? (visible ? 'translateY(0)' : 'translateY(110%)') : 'none',
+        transition: fixed ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+        willChange: fixed ? 'transform' : 'auto',
+      }}
+      className="border-t border-white/[0.05]"
+    >
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 md:gap-8">
 

@@ -199,7 +199,7 @@ const PerspectiveGrid = React.forwardRef((_, ref) => (
 ));
 
 /* ─── Main Hero component ─── */
-const Hero = () => {
+const Hero = ({ onPinEnd, onPinEnterBack }) => {
   const [webglOk, setWebglOk] = useState(() => isWebGLSupported());
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 1024px)').matches : false
@@ -478,10 +478,12 @@ const Hero = () => {
           }
         },
         onLeave: () => {
-          gsap.set(hero, { height: 0 });
+          gsap.set(hero, { height: 0, minHeight: 0 });
+          onPinEnd?.();
         },
         onEnterBack: () => {
-          gsap.set(hero, { height: '100vh' });
+          gsap.set(hero, { height: '100vh', minHeight: '100vh' });
+          onPinEnterBack?.();
         },
       },
     });

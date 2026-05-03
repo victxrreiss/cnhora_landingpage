@@ -1,0 +1,110 @@
+name: Telegram Commit Notify
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  notify:
+    name: Notificar equipe no Telegram
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Enviar notificação no Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          COMMITS_JSON: ${{ toJson(github.event.commits) }}
+          BRANCH: ${{ github.ref_name }}
+          COMPARE_URL: ${{ github.event.compare }}
+          PUSHER: ${{ github.event.pusher.name }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]]; then
+            echo "Secrets não configurados - pulando notificação."
+            exit 0
+          fi
+
+          escape_html() {
+            printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
+          }
+
+          COUNT=$(echo "$COMMITS_JSON" | jq 'length')
+
+          if [[ "$COUNT" -eq 0 ]]; then
+            echo "Nenhum commit no payload - pulando."
+            exit 0
+          fi
+
+          if [[ "$COUNT" -eq 1 ]]; then
+            # ==================== UM ÚNICO COMMIT ====================
+            COMMIT=$(echo "$COMMITS_JSON" | jq -c '.[0]')
+            RAW_MSG=$(echo "$COMMIT" | jq -r '.message' | head -c 500 | head -1)
+            RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
+            COMMIT_URL=$(echo "$COMMIT" | jq -r '.url')
+            FILE_COUNT=$(echo "$COMMIT" | jq '(.added + .removed + .modified) | length')
+
+            FILES=$(echo "$COMMIT" | jq -r '(.added + .removed + .modified) | .[]' | head -3 | sed 's|.*/||' | tr '\n' ' ' | sed 's/ $//')
+
+            MSG=$(escape_html "$RAW_MSG")
+            AUTHOR=$(escape_html "$RAW_AUTHOR")
+            BRANCH_ESC=$(escape_html "$BRANCH")
+
+            if [[ "$FILE_COUNT" -gt 0 ]]; then
+              if [[ "$FILE_COUNT" -gt 3 ]]; then
+                FILES_LINE=$(printf '\n&#128193; <b>%d arquivo(s):</b> %s <i>+%d mais</i>' "$FILE_COUNT" "$FILES" "$((FILE_COUNT - 3))")
+              else
+                FILES_LINE=$(printf '\n&#128193; <b>%d arquivo(s):</b> %s' "$FILE_COUNT" "$FILES")
+              fi
+            else
+              FILES_LINE=""
+            fi
+
+            TEXT=$(printf '&#128276; <b>CNHora Landing page— novo commit</b>\n\n&#127807; <b>Branch:</b> <code>%s</code>\n&#128100; <b>Autor:</b> %s\n&#128172; %s%s\n\n🔗 <a href="%s">Ver commit</a>' \
+              "$BRANCH_ESC" "$AUTHOR" "$MSG" "$FILES_LINE" "$COMMIT_URL")
+
+          else
+            # ==================== MÚLTIPLOS COMMITS ====================
+            MAX=5
+            SHOWN=$(( COUNT < MAX ? COUNT : MAX ))
+            LINES=""
+
+            for i in $(seq 0 $((SHOWN - 1))); do
+              COMMIT=$(echo "$COMMITS_JSON" | jq -c ".[$i]")
+              RAW_LINE=$(echo "$COMMIT" | jq -r '.message' | head -c 300 | head -1)
+              RAW_AUTHOR=$(echo "$COMMIT" | jq -r '.author.name')
+              LINE=$(escape_html "$RAW_LINE")
+              AUTHOR=$(escape_html "$RAW_AUTHOR")
+              LINES=$(printf '%s&#8226; %s <i>(%s)</i>\n' "$LINES" "$LINE" "$AUTHOR")
+            done
+
+            if [[ "$COUNT" -gt "$MAX" ]]; then
+              LINES=$(printf '%s&#8226; <i>... e mais %d commits</i>\n' "$LINES" "$((COUNT - MAX))")
+            fi
+
+            BRANCH_ESC=$(escape_html "$BRANCH")
+            PUSHER_ESC=$(escape_html "$PUSHER")
+
+            TEXT=$(printf '&#128276; <b>CNHora Landing page — %d commits na %s</b>\n&#128100; <b>Pusher:</b> %s\n\n%s\n\n🔗 <a href="%s">Ver todos os commits</a>' \
+              "$COUNT" "$BRANCH_ESC" "$PUSHER_ESC" "$LINES" "$COMPARE_URL")
+          fi
+
+          # Envia a mensagem para o Telegram
+          RESPONSE=$(curl -sf -X POST \
+            "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n \
+              --arg chat_id "$CHAT_ID" \
+              --arg text "$TEXT" \
+              '{chat_id: $chat_id, text: $text, parse_mode: "HTML", disable_web_page_preview: true}')")
+
+          if echo "$RESPONSE" | jq -e '.ok == true' > /dev/null 2>&1; then
+            echo "✅ Notificação enviada com sucesso para o canal."
+          else
+            echo "❌ Falha ao enviar notificação."
+            echo "Resposta: $RESPONSE"
+            exit 1
+          fi

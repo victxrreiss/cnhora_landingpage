@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cnhora.com.br/sitemap.xml

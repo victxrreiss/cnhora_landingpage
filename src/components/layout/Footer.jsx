@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Instagram, Mail, ShieldCheck, X } from 'lucide-react';
 import cnhoraLogo from '/cnhora-logo.svg';
 
@@ -100,22 +101,25 @@ const Footer = () => {
 
             <div className="site-footer-column">
               <h4>Plataforma</h4>
-              <a href="#cta">Baixar app</a>
-              <a href="#instrutores">Para instrutores</a>
-              <a href="#cta">Começar grátis</a>
+              <a href="/#cta">Baixar app</a>
+              <a href="/#instrutores">Para instrutores</a>
+              <a href="/#cta">Começar grátis</a>
             </div>
 
             <div className="site-footer-column">
               <h4>Suporte</h4>
               <a href="mailto:contato@cnhora.com.br">Contato</a>
-              <a href="#cta">Central de ajuda</a>
-              <a href="#cta">Segurança</a>
+              <a href="/#cta">Central de ajuda</a>
+              <a href="/#cta">Segurança</a>
             </div>
 
             <div className="site-footer-column">
               <h4>Legal</h4>
+              <Link to="/privacidade" className="footer-legal-button">Política de Privacidade</Link>
+              <Link to="/lgpd" className="footer-legal-button">LGPD</Link>
+              <Link to="/termos" className="footer-legal-button">Termos de Uso</Link>
               <FooterButton onClick={() => setIsPolicyOpen(true)}>
-                Políticas de Privacidade e LGPD
+                Ver resumo das políticas
               </FooterButton>
               <span className="site-footer-compliance">
                 <ShieldCheck size={14} />

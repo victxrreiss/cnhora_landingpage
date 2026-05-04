@@ -5,6 +5,12 @@ const Privacidade = () => (
   <main className="max-w-3xl mx-auto px-6 py-24 text-white">
     <Helmet>
       <title>Política de Privacidade | CNHora</title>
+      <meta name="description" content="Política de privacidade da CNHora — como coletamos, usamos e protegemos seus dados pessoais." />
+      <link rel="canonical" href="https://cnhora.com.br/privacidade" />
+      <meta name="robots" content="noindex,follow" />
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="Política de Privacidade | CNHora" />
+      <meta property="og:url" content="https://cnhora.com.br/privacidade" />
     </Helmet>
     <h1 className="text-3xl font-extrabold mb-4 text-white">Política de Privacidade</h1>
     <p className="text-white/50 text-sm mb-8">Última atualização: {new Date().getFullYear()}</p>

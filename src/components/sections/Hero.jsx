@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import cnhoraLogo from '/cnhora-logo.svg';
@@ -9,7 +8,7 @@ import { isWebGLSupported } from '../../utils';
 import { useDevicePerformance } from '../../hooks';
 
 const HeroFallback = () => (
-  <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+  <div style={{ minHeight: '100svh', background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #003366 0%, #001428 50%, #000810 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
     <div style={{ maxWidth: '600px', textAlign: 'center', color: '#fff' }}>
       <div style={{ marginBottom: '1.5rem', fontSize: '0.85rem', color: '#ff6b00', fontWeight: 600, letterSpacing: '0.05em' }}>
         O marketplace da educação no trânsito
@@ -271,93 +270,108 @@ const Hero = () => {
     };
   }, []);
 
-  /* ─── Three.js particles ─── */
+  /* ─── Three.js particles (lazy-loaded — saves ~600KB on devices that don't use it) ─── */
   useEffect(() => {
     if (!enableParticles) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let renderer;
-    try {
-      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    } catch (err) {
-      console.error('[Hero] WebGL init failed:', err);
+    let cancelled = false;
+    let cleanup = () => {};
+
+    import('three').then((THREE) => {
+      if (cancelled) return;
+
+      let renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      } catch (err) {
+        console.error('[Hero] WebGL init failed:', err);
+        setWebglOk(false);
+        return;
+      }
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 5;
+
+      const COUNT = 180;
+      const positions = new Float32Array(COUNT * 3);
+      const colors = new Float32Array(COUNT * 3);
+      const sizes = new Float32Array(COUNT);
+
+      for (let i = 0; i < COUNT; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+        const orange = Math.random() > 0.5;
+        colors[i * 3] = orange ? 1.0 : 0.0;
+        colors[i * 3 + 1] = orange ? 0.42 + Math.random() * 0.2 : 0.3 + Math.random() * 0.3;
+        colors[i * 3 + 2] = orange ? 0.0 : 0.8 + Math.random() * 0.2;
+        sizes[i] = Math.random() * 3 + 1;
+      }
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+      const mat = new THREE.PointsMaterial({
+        size: 0.06, vertexColors: true, transparent: true,
+        opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false,
+      });
+
+      const particles = new THREE.Points(geo, mat);
+      scene.add(particles);
+
+      let mouseX = 0, mouseY = 0;
+      const onMouseMove = e => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 0.3;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+      };
+      document.addEventListener('mousemove', onMouseMove);
+
+      let rafId;
+      const animate = () => {
+        rafId = requestAnimationFrame(animate);
+        const t = Date.now() * 0.0003;
+        particles.rotation.y = t * 0.15 + mouseX;
+        particles.rotation.x = t * 0.08 + mouseY;
+        const pos = geo.attributes.position.array;
+        for (let i = 0; i < COUNT; i++) {
+          pos[i * 3 + 1] += Math.sin(t + i) * 0.002;
+        }
+        geo.attributes.position.needsUpdate = true;
+        renderer.render(scene, camera);
+      };
+      animate();
+
+      const onResize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
+      window.addEventListener('resize', onResize);
+
+      cleanup = () => {
+        cancelAnimationFrame(rafId);
+        document.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('resize', onResize);
+        renderer.dispose();
+        geo.dispose();
+        mat.dispose();
+      };
+    }).catch((err) => {
+      console.error('[Hero] three.js dynamic import failed:', err);
       setWebglOk(false);
-      return;
-    }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-
-    const COUNT = 180;
-    const positions = new Float32Array(COUNT * 3);
-    const colors = new Float32Array(COUNT * 3);
-    const sizes = new Float32Array(COUNT);
-
-    for (let i = 0; i < COUNT; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
-      const orange = Math.random() > 0.5;
-      colors[i * 3] = orange ? 1.0 : 0.0;
-      colors[i * 3 + 1] = orange ? 0.42 + Math.random() * 0.2 : 0.3 + Math.random() * 0.3;
-      colors[i * 3 + 2] = orange ? 0.0 : 0.8 + Math.random() * 0.2;
-      sizes[i] = Math.random() * 3 + 1;
-    }
-
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-    const mat = new THREE.PointsMaterial({
-      size: 0.06, vertexColors: true, transparent: true,
-      opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false,
     });
 
-    const particles = new THREE.Points(geo, mat);
-    scene.add(particles);
-
-    let mouseX = 0, mouseY = 0;
-    const onMouseMove = e => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 0.3;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
-    };
-    document.addEventListener('mousemove', onMouseMove);
-
-    let rafId;
-    const animate = () => {
-      rafId = requestAnimationFrame(animate);
-      const t = Date.now() * 0.0003;
-      particles.rotation.y = t * 0.15 + mouseX;
-      particles.rotation.x = t * 0.08 + mouseY;
-      const pos = geo.attributes.position.array;
-      for (let i = 0; i < COUNT; i++) {
-        pos[i * 3 + 1] += Math.sin(t + i) * 0.002;
-      }
-      geo.attributes.position.needsUpdate = true;
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const onResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', onResize);
-
     return () => {
-      cancelAnimationFrame(rafId);
-      document.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('resize', onResize);
-      renderer.dispose();
-      geo.dispose();
-      mat.dispose();
+      cancelled = true;
+      cleanup();
     };
   }, [enableParticles]);
 
@@ -697,6 +711,12 @@ const Hero = () => {
   /* ─── Custom cursor ─── */
   useEffect(() => {
     if (isMobile || !enableFullMotion) return;
+    // Skip on devices without precise pointing (touch-first laptops, tablets with mice).
+    // matchMedia is the most reliable signal — `isMobile` only checks viewport width.
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+      if (!finePointer.matches) return;
+    }
 
     const dot = document.createElement('div');
     dot.className = 'custom-cursor-dot';
@@ -762,8 +782,8 @@ const Hero = () => {
         ref={heroRef}
         className={`hero-motion-${animationLevel}${useColumnLayout ? ' hero-vertical-flow' : ''}${isStaticDesktop ? ' hero-static-desktop' : ''}`}
         style={{
-          height: (useColumnLayout || isStaticDesktop) ? 'auto' : '100vh',
-          minHeight: (useColumnLayout || isStaticDesktop) ? '100svh' : '100vh',
+          height: (useColumnLayout || isStaticDesktop) ? 'auto' : '100svh',
+          minHeight: (useColumnLayout || isStaticDesktop) ? '100svh' : '100svh',
           position: 'relative',
           overflow: (useColumnLayout || isStaticDesktop) ? 'visible' : 'hidden',
           display: 'flex',
@@ -861,8 +881,8 @@ const Hero = () => {
 
               {/* Title */}
               <h1 className="hero-title">
-                Seu tempo.<br />
-                <span className="highlight">Sua direção.</span>
+                Acelere sua CNH.<br />
+                <span className="highlight">Seu tempo, sua direção.</span>
               </h1>
 
               {/* Subtitle */}
@@ -979,8 +999,8 @@ const Hero = () => {
 
               {/* Title */}
               <h1 className="hero-title">
-                Seu tempo.<br />
-                <span className="highlight">Sua direção.</span>
+                Acelere sua CNH.<br />
+                <span className="highlight">Seu tempo, sua direção.</span>
               </h1>
 
               {/* Subtitle */}
@@ -1050,6 +1070,7 @@ const Hero = () => {
 
         {/* Features section — tab switcher + cards */}
         <div
+          id="instrutores"
           className={useColumnLayout ? 'mobile-full-screen' : undefined}
           style={{ order: useColumnLayout ? 2 : undefined, width: useColumnLayout ? '100%' : undefined }}
         >
@@ -1063,6 +1084,7 @@ const Hero = () => {
 
         {/* AppShowcase — animated in by Hero timeline */}
         <div
+          id="manifesto"
           ref={showcaseRef}
           className={`showcase-in-hero${useColumnLayout ? ' mobile-full-screen' : ''}`}
           style={{ order: useColumnLayout ? 3 : undefined }}
@@ -1189,6 +1211,7 @@ const Hero = () => {
 
         {/* CTA Download Section — animated in after AppShowcase */}
         <div
+          id="cta"
           ref={ctaRef}
           className={`cta-download-section${useColumnLayout ? ' mobile-full-screen' : ''}`}
           style={{ order: useColumnLayout ? 4 : undefined }}

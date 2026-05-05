@@ -10,6 +10,9 @@ import LGPD from './pages/LGPD';
 import Termos from './pages/Termos';
 import NotFound from './pages/NotFound';
 
+const GSC_VERIFICATION = import.meta.env.VITE_GSC_VERIFICATION;
+const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID;
+
 function App() {
   const location = useLocation();
 
@@ -30,6 +33,15 @@ function App() {
         <meta property="og:description" content="Conectamos alunos a instrutores independentes. Agende aulas no app, faça simulados e tire sua CNH sem burocracia." />
         <meta property="og:url" content="https://cnhora.com.br/" />
         <meta property="og:image" content="https://cnhora.com.br/og-image.png" />
+        {GSC_VERIFICATION && (
+          <meta name="google-site-verification" content={GSC_VERIFICATION} />
+        )}
+        {GA4_MEASUREMENT_ID && (
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`} />
+        )}
+        {GA4_MEASUREMENT_ID && (
+          <script>{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_MEASUREMENT_ID}');`}</script>
+        )}
       </Helmet>
 
       <Navbar />

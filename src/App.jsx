@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
+import WaitlistSection from './components/sections/WaitlistSection';
 import { ErrorBoundary, WhatsAppSign } from './components/ui';
 import Privacidade from './pages/Privacidade';
 import LGPD from './pages/LGPD';
@@ -53,6 +54,7 @@ function App() {
             <ErrorBoundary>
               <main>
                 <Hero />
+                <WaitlistSection />
               </main>
             </ErrorBoundary>
           }

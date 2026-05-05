@@ -51,6 +51,16 @@ body {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Orbital rings are brand-identity elements, not decorative motion — keep them spinning
+     regardless of OS reduced-motion preference. Restore duration and iteration-count that
+     the wildcard above overrides for all three ring variants. */
+  .orbital-ring {
+    animation-iteration-count: infinite !important;
+  }
+  .ring-1 { animation-duration: 8s !important; }
+  .ring-2 { animation-duration: 12s !important; }
+  .ring-3 { animation-duration: 18s !important; }
 }
 
 @layer components {

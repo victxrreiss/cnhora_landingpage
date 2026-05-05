@@ -904,8 +904,8 @@ const Hero = () => {
 
               {/* Title */}
               <h1 className="hero-title">
-                Acelere sua CNH.<br />
-                <span className="highlight">Seu tempo, sua direção.</span>
+                Seu tempo.<br />
+                <span className="highlight">Sua direção.</span>
               </h1>
 
               {/* Subtitle */}
@@ -1022,8 +1022,8 @@ const Hero = () => {
 
               {/* Title */}
               <h1 className="hero-title">
-                Acelere sua CNH.<br />
-                <span className="highlight">Seu tempo, sua direção.</span>
+                Seu tempo.<br />
+                <span className="highlight">Sua direção.</span>
               </h1>
 
               {/* Subtitle */}

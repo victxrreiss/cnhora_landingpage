@@ -87,7 +87,7 @@ const Footer = () => {
                 segurança e conexões humanas.
               </p>
               <div className="site-footer-socials">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <a href="https://instagram.com/cnhoraoficial" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <Instagram size={16} />
                 </a>
                 <a href="https://wa.me" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">

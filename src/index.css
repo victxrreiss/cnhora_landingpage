@@ -40,6 +40,19 @@ body {
   overflow-x: hidden;
 }
 
+/* Honor OS-level reduced-motion before JS executes — prevents 1-2s flash of
+   heavy animations on devices that explicitly opted out. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
   .glass-nav {
     background: rgba(0, 10, 25, 0.85);
@@ -370,8 +383,8 @@ body {
 /* ===== HERO FINAL CONTENT ===== */
 .hero-content-wrapper {
   position: absolute;
-  left: 15%;
-  width: 42%;
+  left: clamp(1.5rem, 8vw, 15%);
+  width: min(46%, 640px);
   z-index: 30;
   display: flex;
   flex-direction: column;
@@ -379,6 +392,7 @@ body {
   text-align: left;
   pointer-events: none;
   padding: 0;
+  min-width: 0;
 }
 
 .hero-badge {
@@ -407,20 +421,34 @@ body {
 }
 
 .hero-title {
-  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  font-size: clamp(2.4rem, 4.4vw, 4.6rem);
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: -0.03em;
   color: white;
   margin-bottom: 1.5rem;
   text-align: left;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hero-subtitle {
+  overflow-wrap: anywhere;
 }
 
 .hero-title .highlight {
+  color: #FF6B00; /* fallback for browsers without background-clip:text (older Android, UC) */
   background: linear-gradient(135deg, #FF8C00 0%, #FF4500 50%, #FF6B00 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-title .highlight {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 }
 
 .hero-subtitle {
@@ -446,11 +474,18 @@ body {
 .stat-number {
   font-size: 1.8rem;
   font-weight: 800;
+  color: #FF8C00; /* fallback */
   background: linear-gradient(135deg, #FF8C00, #FF6B00);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .stat-number {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 }
 
 .stat-label {
@@ -648,8 +683,8 @@ body {
 /* ===== ANIMATION GROUP (LOGO + RINGS) ===== */
 .hero-animation-group {
   position: absolute;
-  right: 12%;
-  width: 42%;
+  right: clamp(1.5rem, 6vw, 12%);
+  width: min(42%, 560px);
   height: 100%;
   display: flex;
   align-items: center;
@@ -821,9 +856,12 @@ body {
   }
 
   .hero-title {
-    font-size: clamp(2rem, 10vw, 2.8rem);
-    line-height: 1.08;
+    /* Cap title at viewport width minus padding so long PT-BR words ("direção")
+       never overflow on narrow phones (Galaxy Fold 280px, iPhone SE 320px). */
+    font-size: clamp(1.4rem, 6.2vw, 2.4rem);
+    line-height: 1.12;
     margin-bottom: 1rem;
+    overflow-wrap: anywhere;
   }
 
   .hero-subtitle {
@@ -958,11 +996,22 @@ body {
   .hero-badge {
     font-size: 0.68rem;
     letter-spacing: 0.03em;
+    /* Avoid overflow on Galaxy Fold (280px) and similar narrow devices. */
+    max-width: 100%;
+    text-align: center;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .hero-title {
+    font-size: clamp(1.5rem, 8vw, 2.2rem);
+    letter-spacing: -0.02em;
   }
 
   .stats-row {
     width: 100%;
     justify-content: space-between;
+    gap: 0.5rem;
   }
 
   .stat-divider {
@@ -971,12 +1020,67 @@ body {
 
   .stat-item {
     flex: 1;
-    min-width: 30%;
+    min-width: 0;
+  }
+
+  .stat-number {
+    font-size: 1.2rem;
   }
 
   .phone-mockup {
     width: 188px;
     height: 395px;
+  }
+}
+
+@media (max-width: 360px) {
+  /* iPhone SE / Galaxy Fold (closed) — keep content from clipping with long PT-BR strings. */
+  .hero-content-wrapper {
+    width: 96% !important;
+    padding-top: 5.5rem !important;
+  }
+
+  .hero-title {
+    font-size: 1.35rem;
+    letter-spacing: -0.025em;
+    word-spacing: -0.05em;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .hero-badge {
+    font-size: 0.62rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .stats-row {
+    gap: 0.35rem;
+  }
+
+  .stat-number {
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    font-size: 0.9rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .btn-download {
+    font-size: 0.78rem;
+    padding: 0.55rem 1rem;
+  }
+
+  .cta-btn {
+    font-size: 0.85rem;
   }
 }
 
@@ -1251,17 +1355,23 @@ body {
 .cta-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.55rem;
-  padding: 0.85rem 1.75rem;
+  padding: 0.85rem 1.5rem;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
   border: none;
   font-family: inherit;
+  white-space: nowrap;
+  min-width: 0;
+  text-align: center;
 }
+
+.cta-btn svg { flex-shrink: 0; }
 
 .cta-btn:hover {
   transform: translateY(-2px);
@@ -1583,6 +1693,23 @@ body {
     text-align: center !important;
     justify-content: center !important;
     align-items: center !important;
+    max-width: 100% !important;
+  }
+
+  .hero-content-wrapper > * {
+    max-width: 100%;
+  }
+
+  .hero-content-wrapper .hero-title,
+  .hero-content-wrapper .hero-subtitle {
+    width: 100% !important;
+  }
+
+  .hero-content-wrapper .hero-badge {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    justify-content: center;
   }
 
   .hero-animation-group {
@@ -2134,6 +2261,25 @@ html.perf-static .cta-download-section {
   text-align: center !important;
   justify-content: center !important;
   align-items: center !important;
+  /* Without explicit width, flex children with align-items:center default to max-content
+     and overflow the wrapper on narrow viewports. */
+  max-width: 100% !important;
+}
+
+.hero-vertical-flow .hero-content-wrapper > * {
+  max-width: 100%;
+}
+
+.hero-vertical-flow .hero-title,
+.hero-vertical-flow .hero-subtitle {
+  width: 100% !important;
+}
+
+.hero-vertical-flow .hero-badge {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  justify-content: center;
 }
 
 .hero-vertical-flow .hero-animation-group {
@@ -2367,11 +2513,13 @@ html.perf-static .hero-vertical-flow .cta-download-section {
 .hero-static-desktop .hero-animation-group {
   top: 0 !important;
   height: 100vh !important;
+  height: 100svh !important;
 }
 
 .hero-static-desktop .hero-content-wrapper {
   top: 0 !important;
   height: 100vh !important;
+  height: 100svh !important;
   justify-content: center !important;
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -2409,6 +2557,7 @@ html.perf-static .hero-static-desktop .hero-animation-group {
   top: 0 !important;
   width: 42% !important;
   height: 100vh !important;
+  height: 100svh !important;
   min-height: unset !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -2423,6 +2572,7 @@ html.perf-static .hero-static-desktop .hero-content-wrapper {
   top: 0 !important;
   width: 42% !important;
   height: 100vh !important;
+  height: 100svh !important;
   padding: 0 !important;
   margin: 0 !important;
   align-items: flex-start !important;
@@ -2468,6 +2618,7 @@ html.perf-static .hero-static-desktop .showcase-in-hero {
   pointer-events: auto !important;
   width: min(100%, 900px) !important;
   min-height: 100vh !important;
+  min-height: 100svh !important;
   margin: 0 auto !important;
   padding: 4rem 1rem !important;
   order: unset !important;
@@ -2492,6 +2643,7 @@ html.perf-static .hero-static-desktop .cta-download-section {
   pointer-events: auto !important;
   width: min(100%, 860px) !important;
   min-height: 100vh !important;
+  min-height: 100svh !important;
   margin: 0 auto !important;
   padding: 4rem 2rem !important;
   order: unset !important;
@@ -2512,6 +2664,7 @@ html.perf-static .hero-static-desktop .footer-in-hero {
 html.perf-static .hero-static-desktop .hero-cards-container {
   width: min(100%, 1140px) !important;
   min-height: 100vh !important;
+  min-height: 100svh !important;
   padding: 4rem 2rem !important;
 }
 
@@ -2627,6 +2780,17 @@ html.perf-static .hero-static-desktop .hero-feature-card {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.85rem;
+  min-width: 0; /* allow grid track to shrink with long PT-BR labels */
+}
+
+.site-footer-column a,
+.site-footer-column .footer-legal-button {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.site-footer-brand {
+  min-width: 0;
 }
 
 .site-footer-column h4 {
@@ -2850,6 +3014,8 @@ html.perf-static .hero-static-desktop .hero-feature-card {
   position: fixed;
   bottom: 2rem; /* overridden by inline style from JS; kept as no-JS fallback */
   right: 0;
+  /* Avoid the iOS notch / Dynamic Island / home indicator clipping the sign in landscape. */
+  right: max(0px, env(safe-area-inset-right));
   z-index: 40;
   display: flex;
   align-items: center;

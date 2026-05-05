@@ -28,7 +28,13 @@ const Navbar = () => {
           : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
+      <div
+        className="max-w-7xl mx-auto flex justify-between items-center"
+        style={{
+          paddingLeft: 'max(2rem, env(safe-area-inset-left))',
+          paddingRight: 'max(2rem, env(safe-area-inset-right))',
+        }}
+      >
         {/* Logo */}
         <motion.div
           initial={shouldAnimate ? { opacity: 0, x: -20 } : false}

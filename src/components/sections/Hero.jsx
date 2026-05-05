@@ -240,15 +240,33 @@ const Hero = () => {
   const ctaTextRef = useRef(null);
   const ctaButtonsRef = useRef(null);
   const footerRef = useRef(null);
+  const goToCTARef = useRef(null);
 
   const goToCards = (tab) => {
     setActiveTab(tab);
-    if (cardsContainerRef.current) {
-      const cardsTop = cardsContainerRef.current.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: cardsTop - 84, behavior: 'smooth' });
+    if (useColumnLayout || isStaticDesktop) {
+      if (cardsContainerRef.current) {
+        const cardsTop = cardsContainerRef.current.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: cardsTop - 84, behavior: 'smooth' });
+      }
       return;
     }
+    window.scrollTo({ top: (6 / 26) * 8 * window.innerHeight, behavior: 'smooth' });
   };
+
+  const goToCTA = () => {
+    if (useColumnLayout || isStaticDesktop) {
+      if (ctaRef.current) {
+        const top = ctaRef.current.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top - 84, behavior: 'smooth' });
+      }
+      return;
+    }
+    // Position 21 = all CTA animations complete (buttons finish at 19.5 + duration 1.5 = 21)
+    window.scrollTo({ top: (21 / 26) * 8 * window.innerHeight, behavior: 'smooth' });
+  };
+
+  goToCTARef.current = goToCTA;
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 1024px)');
@@ -268,6 +286,11 @@ const Hero = () => {
         mq.removeListener(onChange);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    window.cnhoraGoToCTA = () => goToCTARef.current?.();
+    return () => { delete window.cnhoraGoToCTA; };
   }, []);
 
   /* ─── Three.js particles (lazy-loaded — saves ~600KB on devices that don't use it) ─── */
@@ -923,7 +946,7 @@ const Hero = () => {
                   </svg>
                   Sou Instrutor
                 </a>
-                <button className="btn-download">
+                <button className="btn-download" onClick={goToCTA}>
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
@@ -1041,7 +1064,7 @@ const Hero = () => {
                   </svg>
                   Sou Instrutor
                 </a>
-                <button className="btn-download">
+                <button className="btn-download" onClick={goToCTA}>
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
@@ -1275,7 +1298,7 @@ const Hero = () => {
             </a>
             {useColumnLayout && (
               <a
-                href="https://wa.me/5511999999999"
+                href="https://wa.me/554191057535"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cta-btn cta-btn-whatsapp"

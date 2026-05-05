@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 // ← Replace with CNHora's real WhatsApp number (digits only, with country code)
-const WHATSAPP_NUMBER = '5511999999999';
+const WHATSAPP_NUMBER = '554191057535';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 const DEFAULT_BOTTOM = 32; // px — normal resting position

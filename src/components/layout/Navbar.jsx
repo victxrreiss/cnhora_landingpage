@@ -70,6 +70,7 @@ const Navbar = () => {
 
           <motion.a
             href="#cta"
+            onClick={(e) => { e.preventDefault(); if (typeof window.cnhoraGoToCTA === 'function') window.cnhoraGoToCTA(); }}
             initial={shouldAnimate ? { opacity: 0, y: -10 } : false}
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
             transition={shouldAnimate ? { delay: 0.3 } : undefined}

@@ -1,0 +1,280 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img "CNHora Logo" [ref=e7]
+        - generic [ref=e8]: CNHora
+      - generic [ref=e9]:
+        - link "Como funciona" [ref=e10] [cursor=pointer]:
+          - /url: "#manifesto"
+        - link "Para instrutores" [ref=e11] [cursor=pointer]:
+          - /url: "#instrutores"
+        - link "Preços" [ref=e12] [cursor=pointer]:
+          - /url: "#cta"
+        - link "Começar grátis" [ref=e13] [cursor=pointer]:
+          - /url: "#cta"
+  - main [ref=e14]:
+    - generic [ref=e17]:
+      - generic:
+        - img
+      - img "CNHora" [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]: O marketplace da educação no trânsito
+        - heading "Acelere sua CNH. Seu tempo, sua direção." [level=1] [ref=e25]:
+          - text: Acelere sua CNH.
+          - text: Seu tempo, sua direção.
+        - paragraph [ref=e26]: Conectamos alunos a instrutores independentes com tecnologia de ponta. Agende aulas, faça simulados e conquiste sua CNH sem burocracia.
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]: +12k
+            - generic [ref=e30]: Alunos aprovados
+          - generic [ref=e32]:
+            - generic [ref=e33]: "+800"
+            - generic [ref=e34]: Instrutores ativos
+          - generic [ref=e36]:
+            - generic [ref=e37]: 4.9★
+            - generic [ref=e38]: Avaliação média
+        - generic [ref=e39]:
+          - link "Sou Aluno" [ref=e40] [cursor=pointer]:
+            - /url: "#cta"
+            - text: Sou Aluno
+            - img [ref=e41]
+          - link "Sou Instrutor" [ref=e43] [cursor=pointer]:
+            - /url: "#instrutores"
+            - img [ref=e44]
+            - text: Sou Instrutor
+          - button "Baixar App" [ref=e46] [cursor=pointer]:
+            - img [ref=e47]
+            - text: Baixar App
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - img [ref=e51]
+            - text: LGPD Compliant
+          - generic [ref=e53]:
+            - img [ref=e54]
+            - text: Pagamento Seguro
+      - generic:
+        - generic:
+          - generic [ref=e56]:
+            - button "Sou Aluno" [ref=e57] [cursor=pointer]:
+              - img [ref=e58]
+              - text: Sou Aluno
+            - button "Sou Instrutor" [ref=e61] [cursor=pointer]:
+              - img [ref=e62]
+              - text: Sou Instrutor
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e66]:
+                - img [ref=e67]
+                - text: Teoria
+              - img [ref=e70]
+              - heading "Simulados Inteligentes" [level=3] [ref=e72]
+              - paragraph [ref=e73]: Banco com +5.000 questões por categoria, cronometradas e corrigidas em tempo real. Aprove na teoria com confiança.
+            - generic [ref=e74]:
+              - generic [ref=e75]:
+                - img [ref=e76]
+                - text: Aulas
+              - img [ref=e79]
+              - heading "Escolha seu Instrutor" [level=3] [ref=e81]
+              - paragraph [ref=e82]: Filtre por região, disponibilidade, preço e avaliação. Veja o perfil completo e reserve com 1 clique.
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - img [ref=e85]
+                - text: Progresso
+              - img [ref=e88]
+              - heading "Acompanhe sua Evolução" [level=3] [ref=e90]
+              - paragraph [ref=e91]: Veja horas concluídas, taxa de acerto nos simulados e o quanto falta para conquistar sua CNH.
+      - generic:
+        - generic:
+          - heading "O app que trabalha por você" [level=2]
+          - paragraph: Três funcionalidades que mudam como alunos e instrutores vivem a habilitação.
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic: 9:41
+                - generic:
+                  - img
+                  - img
+                  - img
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Área da Aula
+                  - generic:
+                    - generic: Rua das Acácias, 42
+                    - generic:
+                      - generic: Aula às 14h
+                      - generic: 15 min
+                - generic:
+                  - generic:
+                    - generic: Mapa de Erros
+                  - generic:
+                    - generic: Últimos erros registrados
+                    - generic:
+                      - generic: 4 erros
+                      - generic: Zona Sul
+                - generic:
+                  - generic:
+                    - generic: Financeiro
+                  - generic:
+                    - generic: Saldo disponível
+                    - generic: R$ 2.840
+                    - generic: ↑ +R$ 360 esta semana
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: Aula confirmada
+                        - generic: Hoje, 14:00
+                      - generic: +R$ 180
+                    - generic:
+                      - generic:
+                        - generic: Pagamento recebido
+                        - generic: Ontem
+                      - generic: +R$ 360
+                    - generic:
+                      - generic:
+                        - generic: Aula agendada
+                        - generic: Amanhã, 10:00
+                      - generic: R$ 180
+          - generic:
+            - generic:
+              - generic:
+                - heading "Tenha a área da sua aula no mapa" [level=3]
+                - paragraph: O instrutor define previamente o local da aula. O aluno chega sabendo exatamente onde vai ser.
+              - generic:
+                - heading "Veja onde você errou, para não errar de novo" [level=3]
+                - paragraph: Erros registrados no mapa com localização exata. Aluno evolui, instrutor acompanha.
+              - generic:
+                - heading "Painel financeiro completo" [level=3]
+                - paragraph: Controle de ganhos, aulas confirmadas e histórico de pagamentos em um único lugar.
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - img "CNHora"
+        - heading "Baixe o app e comece sua jornada hoje" [level=2]
+        - paragraph: Tenha o controle total da sua habilitação na palma da mão. Agende aulas, acompanhe seu progresso e conecte‑se com instrutores.
+        - generic:
+          - link "Baixar na Playstore":
+            - /url: "#playstore"
+            - img
+            - text: Baixar na Playstore
+          - link "Baixar na Apple Store":
+            - /url: "#appstore"
+            - img
+            - text: Baixar na Apple Store
+      - generic [ref=e92]:
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - img "CNHora" [ref=e97]
+              - generic [ref=e98]: CNHora
+            - paragraph [ref=e99]: Acelerando o futuro da educação no trânsito através de tecnologia, segurança e conexões humanas.
+            - generic [ref=e100]:
+              - link "Instagram" [ref=e101] [cursor=pointer]:
+                - /url: https://instagram.com/cnhoraoficial
+                - img [ref=e102]
+              - link "WhatsApp" [ref=e106] [cursor=pointer]:
+                - /url: https://wa.me
+                - img [ref=e107]
+              - link "Email" [ref=e109] [cursor=pointer]:
+                - /url: mailto:contato@cnhora.com.br
+                - img [ref=e110]
+          - generic [ref=e113]:
+            - heading "Plataforma" [level=4] [ref=e114]
+            - link "Baixar app" [ref=e115] [cursor=pointer]:
+              - /url: /#cta
+            - link "Para instrutores" [ref=e116] [cursor=pointer]:
+              - /url: /#instrutores
+            - link "Começar grátis" [ref=e117] [cursor=pointer]:
+              - /url: /#cta
+          - generic [ref=e118]:
+            - heading "Suporte" [level=4] [ref=e119]
+            - link "Contato" [ref=e120] [cursor=pointer]:
+              - /url: mailto:contato@cnhora.com.br
+            - link "Central de ajuda" [ref=e121] [cursor=pointer]:
+              - /url: /#cta
+            - link "Segurança" [ref=e122] [cursor=pointer]:
+              - /url: /#cta
+          - generic [ref=e123]:
+            - heading "Legal" [level=4] [ref=e124]
+            - link "Política de Privacidade" [ref=e125] [cursor=pointer]:
+              - /url: /privacidade
+            - link "LGPD" [ref=e126] [cursor=pointer]:
+              - /url: /lgpd
+            - link "Termos de Uso" [ref=e127] [cursor=pointer]:
+              - /url: /termos
+            - button "Ver resumo das políticas" [ref=e128] [cursor=pointer]
+            - generic [ref=e129]:
+              - img [ref=e130]
+              - text: Em conformidade com a LGPD
+        - generic [ref=e133]:
+          - paragraph [ref=e134]: © 2026 CNHora. Todos os direitos reservados.
+          - button "Privacidade e LGPD" [ref=e135] [cursor=pointer]
+      - generic:
+        - generic: Role para explorar
+    - region "Garanta seu acesso antes de todo mundo." [ref=e136]:
+      - generic [ref=e137]:
+        - generic [ref=e138]:
+          - generic [ref=e139]: Em pré-lançamento
+          - heading "Garanta seu acesso antes de todo mundo." [level=2] [ref=e140]:
+            - text: Garanta seu acesso
+            - text: antes de todo mundo.
+          - paragraph [ref=e141]: O CNHora está chegando. Entre na lista e seja avisado quando o app estiver disponível na sua cidade — alunos com prioridade nas primeiras vagas, instrutores com onboarding antecipado.
+        - generic [ref=e143]:
+          - generic [ref=e144]:
+            - generic [ref=e145]: Email
+            - textbox "Email" [ref=e146]:
+              - /placeholder: seu@email.com
+          - generic [ref=e147]:
+            - generic [ref=e148]:
+              - generic [ref=e149]: Cidade
+              - textbox "Cidade" [ref=e150]:
+                - /placeholder: Campinas
+            - generic [ref=e151]:
+              - generic [ref=e152]: UF
+              - combobox "UF" [ref=e153] [cursor=pointer]:
+                - option "UF" [disabled] [selected]
+                - option "AC"
+                - option "AL"
+                - option "AP"
+                - option "AM"
+                - option "BA"
+                - option "CE"
+                - option "DF"
+                - option "ES"
+                - option "GO"
+                - option "MA"
+                - option "MT"
+                - option "MS"
+                - option "MG"
+                - option "PA"
+                - option "PB"
+                - option "PR"
+                - option "PE"
+                - option "PI"
+                - option "RJ"
+                - option "RN"
+                - option "RS"
+                - option "RO"
+                - option "RR"
+                - option "SC"
+                - option "SP"
+                - option "SE"
+                - option "TO"
+          - group "Você é" [ref=e154]:
+            - generic [ref=e155]: Você é
+            - generic [ref=e156] [cursor=pointer]:
+              - radio "Aluno" [checked] [ref=e157]
+              - generic [ref=e158]: Aluno
+            - generic [ref=e159] [cursor=pointer]:
+              - radio "Instrutor" [ref=e160]
+              - generic [ref=e161]: Instrutor
+          - text: Não preencha este campo
+          - textbox [ref=e162]
+          - button "Entrar na lista" [ref=e163] [cursor=pointer]
+          - paragraph [ref=e164]: Ao entrar na lista você concorda em receber novidades por email. Nada de spam.
+  - link "Fale conosco pelo WhatsApp" [ref=e165] [cursor=pointer]:
+    - /url: https://wa.me/554191057535
+    - img [ref=e166]

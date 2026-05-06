@@ -1,0 +1,490 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e8]:
+          - generic [ref=e9]:
+            - link "Google Workspace" [ref=e10] [cursor=pointer]:
+              - /url: https://developers.google.com/workspace
+              - img "Google Workspace" [ref=e13]
+            - list [ref=e15]:
+              - listitem [ref=e16]:
+                - link "GoogleWorkspace" [ref=e17] [cursor=pointer]:
+                  - /url: https://developers.google.com/workspace
+                  - heading "GoogleWorkspace" [level=1] [ref=e18]:
+                    - img "Google" [ref=e19]
+                    - text: Workspace
+          - navigation "Upper tabs" [ref=e24]:
+            - link "Home" [ref=e26] [cursor=pointer]:
+              - /url: https://developers.google.com/workspace
+            - link "Apps Script, selected" [ref=e28] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script
+              - text: Apps Script
+            - generic [ref=e29]:
+              - link "All products" [ref=e30] [cursor=pointer]:
+                - /url: https://developers.google.com/workspace/products-menu
+              - button "Dropdown menu for All products" [ref=e31] [cursor=pointer]: arrow_drop_down
+            - generic [ref=e32]:
+              - link "Resources" [ref=e33] [cursor=pointer]:
+                - /url: https://developers.google.com/workspace/resources-menu
+              - button "Dropdown menu for Resources" [ref=e34] [cursor=pointer]: arrow_drop_down
+            - generic [ref=e35]:
+              - link "MCP servers" [ref=e36] [cursor=pointer]:
+                - /url: https://developers.google.com/workspace/guides/configure-mcp-servers
+              - button "Dropdown menu for MCP servers" [ref=e37] [cursor=pointer]: arrow_drop_down
+        - generic [ref=e40]:
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "Apps Script" [ref=e46] [cursor=pointer]:
+                - /url: https://developers.google.com/apps-script
+          - navigation "Lower tabs" [ref=e49]:
+            - link "Overview, selected" [ref=e51] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script
+              - text: Overview
+            - link "Guides" [ref=e53] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script/overview
+            - link "Reference" [ref=e55] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script/reference
+            - link "Samples" [ref=e57] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script/samples
+            - link "Support" [ref=e59] [cursor=pointer]:
+              - /url: https://developers.google.com/apps-script/support
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - text: filter_list
+        - searchbox "Type to filter" [ref=e62]
+        - text: close
+      - navigation "Side menu" [ref=e63]:
+        - text: arrow_back
+        - generic [ref=e64]:
+          - text: arrow_forward arrow_forward arrow_forward
+          - list [ref=e66]:
+            - listitem
+            - listitem [ref=e67]:
+              - link "Home" [ref=e68] [cursor=pointer]:
+                - /url: /workspace
+                - generic [ref=e69]: Home
+            - listitem [ref=e70]:
+              - link "Developer products" [ref=e71] [cursor=pointer]:
+                - /url: /workspace/products
+                - generic [ref=e72]: Developer products
+            - listitem [ref=e73]:
+              - link "Get started" [ref=e74] [cursor=pointer]:
+                - /url: /workspace/guides/get-started
+                - generic [ref=e75]: Get started
+            - listitem [ref=e76]:
+              - link "Build with AI" [ref=e77] [cursor=pointer]:
+                - /url: /workspace/guides/ai-overview
+                - generic [ref=e78]: Build with AI
+            - listitem [ref=e79]:
+              - link "Try it now" [ref=e80] [cursor=pointer]:
+                - /url: /workspace/explore
+                - generic [ref=e81]: Try it now
+            - listitem [ref=e82]:
+              - link "Google Workspace standardized model for agent tools and APIs" [ref=e83] [cursor=pointer]:
+                - /url: /workspace/tools-safety
+                - generic [ref=e84]: Google Workspace standardized model for agent tools and APIs
+            - listitem [ref=e85]:
+              - generic [ref=e87]: Google Workspace apps
+            - listitem [ref=e88]:
+              - link "Admin console" [ref=e89] [cursor=pointer]:
+                - /url: /workspace/admin
+                - generic [ref=e90]: Admin console
+            - listitem [ref=e91]:
+              - link "Cloud Search" [ref=e92] [cursor=pointer]:
+                - /url: /workspace/cloud-search
+                - generic [ref=e93]: Cloud Search
+            - listitem [ref=e94]:
+              - link "Gmail" [ref=e95] [cursor=pointer]:
+                - /url: /workspace/gmail
+                - generic [ref=e96]: Gmail
+            - listitem [ref=e97]:
+              - link "Google Calendar" [ref=e98] [cursor=pointer]:
+                - /url: /workspace/calendar
+                - generic [ref=e99]: Google Calendar
+            - listitem [ref=e100]:
+              - link "Google Chat" [ref=e101] [cursor=pointer]:
+                - /url: /workspace/chat
+                - generic [ref=e102]: Google Chat
+            - listitem [ref=e103]:
+              - link "Google Classroom" [ref=e104] [cursor=pointer]:
+                - /url: /workspace/classroom
+                - generic [ref=e105]: Google Classroom
+            - listitem [ref=e106]:
+              - link "Google Docs" [ref=e107] [cursor=pointer]:
+                - /url: /workspace/docs
+                - generic [ref=e108]: Google Docs
+            - listitem [ref=e109]:
+              - link "Google Drive" [ref=e110] [cursor=pointer]:
+                - /url: /workspace/drive
+                - generic [ref=e111]: Google Drive
+            - listitem [ref=e112]:
+              - link "Google Forms" [ref=e113] [cursor=pointer]:
+                - /url: /workspace/forms
+                - generic [ref=e114]: Google Forms
+            - listitem [ref=e115]:
+              - link "Google Keep" [ref=e116] [cursor=pointer]:
+                - /url: /workspace/keep
+                - generic [ref=e117]: Google Keep
+            - listitem [ref=e118]:
+              - link "Google Meet" [ref=e119] [cursor=pointer]:
+                - /url: /workspace/meet
+                - generic [ref=e120]: Google Meet
+            - listitem [ref=e121]:
+              - link "Google Sheets" [ref=e122] [cursor=pointer]:
+                - /url: /workspace/sheets
+                - generic [ref=e123]: Google Sheets
+            - listitem [ref=e124]:
+              - link "Google Sites" [ref=e125] [cursor=pointer]:
+                - /url: /workspace/sites
+                - generic [ref=e126]: Google Sites
+            - listitem [ref=e127]:
+              - link "Google Slides" [ref=e128] [cursor=pointer]:
+                - /url: /workspace/slides
+                - generic [ref=e129]: Google Slides
+            - listitem [ref=e130]:
+              - link "Google Tasks" [ref=e131] [cursor=pointer]:
+                - /url: /workspace/tasks
+                - generic [ref=e132]: Google Tasks
+            - listitem [ref=e133]:
+              - link "Google Vault" [ref=e134] [cursor=pointer]:
+                - /url: /workspace/vault
+                - generic [ref=e135]: Google Vault
+            - listitem [ref=e136]
+            - listitem [ref=e137]:
+              - link "Subscribe to Google Workspace events" [ref=e138] [cursor=pointer]:
+                - /url: /workspace/events
+                - generic [ref=e139]: Subscribe to Google Workspace events
+            - listitem [ref=e140]:
+              - generic [ref=e142]: Extend, automate & share
+            - listitem [ref=e143]:
+              - link "Overview" [ref=e144] [cursor=pointer]:
+                - /url: /workspace/extend
+                - generic [ref=e145]: Overview
+            - listitem [ref=e146]:
+              - link "Add-ons" [ref=e147] [cursor=pointer]:
+                - /url: /workspace/add-ons
+                - generic [ref=e148]: Add-ons
+            - listitem [ref=e149]:
+              - link "Apps Script" [ref=e150] [cursor=pointer]:
+                - /url: /apps-script
+                - generic [ref=e151]: Apps Script
+            - listitem [ref=e152]:
+              - link "Chat apps" [ref=e153] [cursor=pointer]:
+                - /url: /workspace/add-ons/chat
+                - generic [ref=e154]: Chat apps
+            - listitem [ref=e155]:
+              - link "Drive apps" [ref=e156] [cursor=pointer]:
+                - /url: /workspace/drive/api/guides/about-apps
+                - generic [ref=e157]: Drive apps
+            - listitem [ref=e158]:
+              - link "Marketplace" [ref=e159] [cursor=pointer]:
+                - /url: /workspace/marketplace
+                - generic [ref=e160]: Marketplace
+            - listitem [ref=e161]:
+              - generic [ref=e163]: Release notes
+            - listitem [ref=e164]:
+              - link "Recent product changes" [ref=e165] [cursor=pointer]:
+                - /url: /workspace/release-notes
+                - generic [ref=e166]: Recent product changes
+            - listitem [ref=e167]:
+              - link "Index of release notes" [ref=e168] [cursor=pointer]:
+                - /url: /workspace/release-notes/all
+                - generic [ref=e169]: Index of release notes
+            - listitem [ref=e170]:
+              - generic [ref=e172]: Stay informed
+            - listitem [ref=e173]:
+              - link "Subscribe to our newsletter" [ref=e174] [cursor=pointer]:
+                - /url: /workspace/newsletters
+                - generic [ref=e175]: Subscribe to our newsletter
+            - listitem [ref=e176]:
+              - link "Join the Developer Preview Program" [ref=e177] [cursor=pointer]:
+                - /url: /workspace/preview
+                - generic [ref=e178]: Join the Developer Preview Program
+            - listitem [ref=e179]:
+              - link "Explore our YouTube channel" [ref=e180] [cursor=pointer]:
+                - /url: /workspace/videos
+                - generic [ref=e181]: Explore our YouTube channel
+            - listitem [ref=e182]:
+              - link "Partner with Google Workspace" [ref=e183] [cursor=pointer]:
+                - /url: /workspace/partners
+                - generic [ref=e184]: Partner with Google Workspace
+            - listitem [ref=e185]:
+              - link "Attend Google Developers events" [ref=e186] [cursor=pointer]:
+                - /url: /events
+                - generic [ref=e187]: Attend Google Developers events
+    - generic [ref=e188]:
+      - main [ref=e189]:
+        - generic:
+          - generic:
+            - navigation "On this page"
+        - generic [ref=e190]:
+          - article [ref=e191]:
+            - navigation: chevron_right chevron_right
+            - generic [ref=e192]:
+              - generic [ref=e196]:
+                - figure [ref=e198]
+                - generic [ref=e201]:
+                  - heading "Automate & extend Google Workspace with simple code." [level=3] [ref=e202]
+                  - generic [ref=e203]:
+                    - paragraph [ref=e204]: Apps Script is a cloud-based JavaScript platform powered by Google Drive that lets you integrate with and automate tasks across Google products.
+                    - generic [ref=e205]:
+                      - link "Sign in" [ref=e206] [cursor=pointer]:
+                        - /url: https://accounts.google.com/ServiceLogin?continue=https://developers.google.com/_d/return%3Fcontinue%3Dhttps%253A%252F%252Fdevelopers.google.com%252Fapps-script
+                      - link "What can Apps Script do?" [ref=e207] [cursor=pointer]:
+                        - /url: /apps-script/overview
+              - heading "Develop high quality solutions with ease" [level=2] [ref=e212]
+              - generic [ref=e215]:
+                - generic [ref=e218]:
+                  - heading "Automations" [level=3] [ref=e219]:
+                    - link "Automations" [ref=e220] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/guides/menus
+                  - paragraph [ref=e222]: Write code that programmatically performs tasks across Google products. Automations are set in motion by custom menus, buttons, user actions, or a time-based schedule.
+                - generic [ref=e225]:
+                  - heading "Custom functions" [level=3] [ref=e226]:
+                    - link "Custom functions" [ref=e227] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/guides/sheets/functions
+                  - paragraph [ref=e229]: Write Google Sheets functions in Apps Script and call them from your spreadsheet just like built-in functions.
+                - generic [ref=e232]:
+                  - heading "Add-ons" [level=3] [ref=e233]:
+                    - link "Add-ons" [ref=e234] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/add-ons/overview
+                  - paragraph [ref=e236]: Build an app that automates tasks or connects to third-party services from within Google Workspace. Share your solution with others on the Google Workspace Marketplace.
+                - generic [ref=e239]:
+                  - heading "Chat apps" [level=3] [ref=e240]:
+                    - link "Chat apps" [ref=e241] [cursor=pointer]:
+                      - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-apps-script
+                  - paragraph [ref=e243]: Provide a conversational interface that lets Google Chat users interact with services as if the service were a person.
+              - generic [ref=e251]:
+                - heading "Power your scripts with AI" [level=3] [ref=e252]
+                - generic [ref=e253]: Discover and try Apps Script samples that help you get started with building AI features using AI models, agents, platforms, and more.
+                - link "Explore Apps Script samples" [ref=e255] [cursor=pointer]:
+                  - /url: https://developers.google.com/apps-script/samples
+              - generic [ref=e258]:
+                - generic [ref=e261]:
+                  - heading "Vertex AI quickstart" [level=3] [ref=e262]
+                  - generic [ref=e263]: Apps Script's Vertex AI advanced service lets you access and use generative AI models on the Google Cloud Vertex AI platform.
+                  - link "View sample" [ref=e265] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/quickstart/vertex-ai
+                - generic [ref=e268]:
+                  - heading "ADK agent quickstart" [level=3] [ref=e269]
+                  - generic [ref=e270]: Build an agentic Google Chat app using Agent Development Kit (ADK) and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e272] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-adk-agent
+                - generic [ref=e275]:
+                  - heading "A2A agent quickstart" [level=3] [ref=e276]
+                  - generic [ref=e277]: Build an agentic Google Chat app using Agent2Agent (A2A) and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e279] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-a2a-agent
+                - generic [ref=e282]:
+                  - heading "Gmail message analyzer" [level=3] [ref=e283]
+                  - generic [ref=e284]: Build an add-on that analyzes and labels Gmail messages with Gemini and Vertex AI.
+                  - link "View sample" [ref=e286] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/samples/gmail-sentiment-analysis-ai
+                - generic [ref=e289]:
+                  - heading "Travel Concierge agent" [level=3] [ref=e290]
+                  - generic [ref=e291]: Build an AI agent add-on that integrates with ADK and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e293] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/samples/travel-concierge
+                - generic [ref=e296]:
+                  - heading "Fact-checker custom function" [level=3] [ref=e297]
+                  - generic [ref=e298]: Build a custom function powered by a Vertex AI agent and Gemini model.
+                  - link "View sample" [ref=e300] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/samples/custom-functions/fact-check
+                - generic [ref=e303]:
+                  - heading "ADK agent quickstart" [level=3] [ref=e304]
+                  - generic [ref=e305]: Build an agentic Google Chat app using Agent Development Kit (ADK) and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e307] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-adk-agent
+                - generic [ref=e310]:
+                  - heading "A2A agent quickstart" [level=3] [ref=e311]
+                  - generic [ref=e312]: Build an agentic Google Chat app using Agent2Agent (A2A) and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e314] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-a2a-agent
+                - generic [ref=e317]:
+                  - heading "A2UI agent quickstart" [level=3] [ref=e318]
+                  - generic [ref=e319]: Build an agentic Google Chat app using Agent2UI (A2UI) and Vertex AI Agent Engine.
+                  - link "View sample" [ref=e321] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-a2ui-agent
+                - generic [ref=e324]:
+                  - heading "Vertex AI service" [level=3] [ref=e325]
+                  - generic [ref=e326]: Apps Script's Vertex AI advanced service lets you access and use generative AI models on the Google Cloud Vertex AI platform.
+                  - link "View sample" [ref=e328] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/advanced/vertex-ai
+                - generic [ref=e331]:
+                  - heading "Gemini Enterprise agent quickstart" [level=3] [ref=e332]
+                  - generic [ref=e333]: Build an agentic Google Chat app using Gemini Enterprise.
+                  - link "View sample" [ref=e335] [cursor=pointer]:
+                    - /url: https://developers.google.com/workspace/add-ons/chat/quickstart-ge-agent
+                - generic [ref=e338]:
+                  - heading "Gemini Enterprise Agents" [level=3] [ref=e339]
+                  - generic [ref=e340]: Build Gemini Enterprise agents that are tightly integrated with Workspace data stores, APIs, and Chat apps.
+                  - link "View codelab" [ref=e342] [cursor=pointer]:
+                    - /url: //codelabs.developers.google.com/ge-gws-agents
+                - generic [ref=e345]:
+                  - heading "Vertex AI Agents" [level=3] [ref=e346]
+                  - generic [ref=e347]: Build Vertex AI agents that are tightly integrated with Workspace data stores, APIs, and Chat apps.
+                  - link "View codelab" [ref=e349] [cursor=pointer]:
+                    - /url: //codelabs.developers.google.com/vertexai-gws-agents
+                - generic [ref=e352]:
+                  - heading "Vibe-code a Gmail add-on" [level=3] [ref=e353]
+                  - generic [ref=e354]: Build a dynamic Gmail add-on from the ground up using the Gemini CLI, MCP servers, and Vertex AI.
+                  - link "View codelab" [ref=e356] [cursor=pointer]:
+                    - /url: //codelabs.developers.google.com/devsite/codelabs/apps-script-vibe-code-gmail-add-on-gemini-cli-mcp-servers
+              - table [ref=e363]:
+                - rowgroup [ref=e364]:
+                  - row "Want to see Apps Script in action? The Google Workspace Developers channel offers videos about tips, tricks, and the latest features. Subscribe now" [ref=e365]:
+                    - cell [ref=e366]:
+                      - img [ref=e367]
+                    - cell "Want to see Apps Script in action? The Google Workspace Developers channel offers videos about tips, tricks, and the latest features. Subscribe now" [ref=e368]:
+                      - generic [ref=e369]: Want to see Apps Script in action?
+                      - generic [ref=e370]: The Google Workspace Developers channel offers videos about tips, tricks, and the latest features.
+                      - link "Subscribe now" [ref=e372] [cursor=pointer]:
+                        - /url: https://www.youtube.com/channel/UCUcg6az6etU_gRtZVAhBXaw
+              - generic [ref=e375]:
+                - generic [ref=e378]:
+                  - heading "Release notes" [level=3] [ref=e379]:
+                    - link "Release notes" [ref=e380] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/releases
+                  - generic [ref=e381]: Learn what's new in Apps Script.
+                  - link "View release notes" [ref=e383] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/releases
+                - generic [ref=e386]:
+                  - heading "Support" [level=3] [ref=e387]:
+                    - link "Support" [ref=e388] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/support
+                  - generic [ref=e389]: Ask a question, file a bug, or request a feature.
+                  - link "Get help" [ref=e391] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/support
+                - generic [ref=e394]:
+                  - heading "REST API" [level=3] [ref=e395]:
+                    - link "REST API" [ref=e396] [cursor=pointer]:
+                      - /url: https://developers.google.com/apps-script/api/concepts
+                  - generic [ref=e397]: Manage your script projects programmatically.
+                  - link "Use the REST API" [ref=e399] [cursor=pointer]:
+                    - /url: https://developers.google.com/apps-script/api/concepts
+          - generic [ref=e400]:
+            - paragraph [ref=e401]:
+              - text: Except as otherwise noted, the content of this page is licensed under the
+              - link "Creative Commons Attribution 4.0 License" [ref=e402] [cursor=pointer]:
+                - /url: https://creativecommons.org/licenses/by/4.0/
+              - text: ", and code samples are licensed under the"
+              - link "Apache 2.0 License" [ref=e403] [cursor=pointer]:
+                - /url: https://www.apache.org/licenses/LICENSE-2.0
+              - text: . For details, see the
+              - link "Google Developers Site Policies" [ref=e404] [cursor=pointer]:
+                - /url: https://developers.google.com/site-policies
+              - text: . Java is a registered trademark of Oracle and/or its affiliates.
+            - paragraph [ref=e405]: Last updated 2026-03-03 UTC.
+      - navigation "Promotions" [ref=e407]:
+        - list [ref=e408]:
+          - listitem [ref=e409]:
+            - link "Blog Blog" [ref=e410] [cursor=pointer]:
+              - /url: https://developers.googleblog.com/search/?query=Google+Workspace
+              - img "Blog" [ref=e412]
+              - text: Blog
+            - generic [ref=e413]: Read the Google Workspace Developers blog
+          - listitem [ref=e414]:
+            - link "Stack Overflow Stack Overflow" [ref=e415] [cursor=pointer]:
+              - /url: http://stackoverflow.com/questions/tagged/google-apps-script
+              - img "Stack Overflow" [ref=e417]
+              - text: Stack Overflow
+            - generic [ref=e418]: Ask a question under the google-apps-script tag
+          - listitem [ref=e419]:
+            - link "Code Samples Code Samples" [ref=e420] [cursor=pointer]:
+              - /url: /apps-script/samples
+              - img "Code Samples" [ref=e422]
+              - text: Code Samples
+            - generic [ref=e423]: Explore our code samples or copy them to build your own
+          - listitem [ref=e424]:
+            - link "Videos Videos" [ref=e425] [cursor=pointer]:
+              - /url: https://www.youtube.com/channel/UCUcg6az6etU_gRtZVAhBXaw
+              - img "Videos" [ref=e427]
+              - text: Videos
+            - generic [ref=e428]: Watch Apps Script tutorials
+      - navigation "Footer links" [ref=e430]:
+        - list [ref=e431]:
+          - listitem [ref=e432]:
+            - heading "Google Workspace for Developers" [level=3] [ref=e433]
+            - list [ref=e434]:
+              - listitem [ref=e435]:
+                - link "Platform overview" [ref=e436] [cursor=pointer]:
+                  - /url: /workspace
+              - listitem [ref=e437]:
+                - link "Developer products" [ref=e438] [cursor=pointer]:
+                  - /url: /workspace/products
+              - listitem [ref=e439]:
+                - link "Release notes" [ref=e440] [cursor=pointer]:
+                  - /url: /workspace/release-notes
+              - listitem [ref=e441]:
+                - link "Developer support" [ref=e442] [cursor=pointer]:
+                  - /url: /workspace/support
+              - listitem [ref=e443]:
+                - link "Terms of Service" [ref=e444] [cursor=pointer]:
+                  - /url: /workspace/terms
+          - listitem [ref=e445]:
+            - heading "Tools" [level=3] [ref=e446]
+            - list [ref=e447]:
+              - listitem [ref=e448]:
+                - link "Admin console" [ref=e449] [cursor=pointer]:
+                  - /url: https://admin.google.com/
+              - listitem [ref=e450]:
+                - link "Apps Script Dashboard" [ref=e451] [cursor=pointer]:
+                  - /url: https://script.google.com/
+              - listitem [ref=e452]:
+                - link "Google Cloud console" [ref=e453] [cursor=pointer]:
+                  - /url: https://console.cloud.google.com/workspace-api
+              - listitem [ref=e454]:
+                - link "APIs Explorer" [ref=e455] [cursor=pointer]:
+                  - /url: /workspace/explore
+          - listitem [ref=e456]:
+            - heading "Connect" [level=3] [ref=e457]
+            - list [ref=e458]:
+              - listitem [ref=e459]:
+                - link "Blog" [ref=e460] [cursor=pointer]:
+                  - /url: https://developers.googleblog.com/search/?query=Google+Workspace
+              - listitem [ref=e461]:
+                - link "Newsletter" [ref=e462] [cursor=pointer]:
+                  - /url: /workspace/newsletters
+              - listitem [ref=e463]:
+                - link "X (Twitter)" [ref=e464] [cursor=pointer]:
+                  - /url: https://twitter.com/workspacedevs
+              - listitem [ref=e465]:
+                - link "YouTube" [ref=e466] [cursor=pointer]:
+                  - /url: https://www.youtube.com/channel/UCUcg6az6etU_gRtZVAhBXaw
+      - generic [ref=e468]:
+        - navigation "Other Google Developers websites" [ref=e469]:
+          - link "Google Developers" [ref=e470] [cursor=pointer]:
+            - /url: https://developers.google.com/
+            - img "Google Developers" [ref=e472]
+          - list [ref=e473]:
+            - listitem [ref=e474]:
+              - link "Android" [ref=e475] [cursor=pointer]:
+                - /url: //developer.android.com
+            - listitem [ref=e476]:
+              - link "Chrome" [ref=e477] [cursor=pointer]:
+                - /url: //developer.chrome.com/home
+            - listitem [ref=e478]:
+              - link "Firebase" [ref=e479] [cursor=pointer]:
+                - /url: //firebase.google.com
+            - listitem [ref=e480]:
+              - link "Google Cloud Platform" [ref=e481] [cursor=pointer]:
+                - /url: //cloud.google.com
+            - listitem [ref=e482]:
+              - link "Google AI" [ref=e483] [cursor=pointer]:
+                - /url: //ai.google.dev/
+            - listitem [ref=e484]:
+              - link "All products" [ref=e485] [cursor=pointer]:
+                - /url: /products
+        - navigation "Utility links" [ref=e486]:
+          - list [ref=e487]:
+            - listitem [ref=e488]:
+              - link "Terms" [ref=e489] [cursor=pointer]:
+                - /url: /terms/site-terms
+            - listitem [ref=e490]:
+              - text: "|"
+              - link "Privacy" [ref=e491] [cursor=pointer]:
+                - /url: //policies.google.com/privacy
+            - text: "|"

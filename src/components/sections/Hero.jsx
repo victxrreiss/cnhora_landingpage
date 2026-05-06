@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import cnhoraLogo from '/cnhora-logo.svg';
 import Features from './Features';
+import WaitlistSection from './WaitlistSection';
 import Footer from '../layout/Footer';
 import { isWebGLSupported } from '../../utils';
 import { useDevicePerformance } from '../../hooks';
@@ -239,7 +240,8 @@ const Hero = () => {
   const ctaTitleRef = useRef(null);
   const ctaTextRef = useRef(null);
   const ctaButtonsRef = useRef(null);
-  const footerRef = useRef(null);
+  const endContentRef = useRef(null);
+  const heroEndPanelRef = useRef(null);
   const goToCTARef = useRef(null);
 
   const goToCards = (tab) => {
@@ -416,7 +418,8 @@ const Hero = () => {
           ctaTitleRef.current,
           ctaTextRef.current,
           ctaButtonsRef.current,
-          footerRef.current,
+          endContentRef.current,
+          heroEndPanelRef.current,
         ].filter(Boolean),
         {
           opacity: 1,
@@ -542,8 +545,7 @@ const Hero = () => {
     gsap.set(ctaTitleRef.current, { opacity: 0, y: 40 });
     gsap.set(ctaTextRef.current, { opacity: 0, y: 35 });
     gsap.set(ctaButtonsRef.current, { opacity: 0, y: 30 });
-    const footerH = footerRef.current ? footerRef.current.offsetHeight : 200;
-    gsap.set(footerRef.current, { opacity: 0, y: footerH });
+    gsap.set(heroEndPanelRef.current, { y: 0 });
     showcaseScreenRefs.current.forEach((el, i) => {
       if (el) gsap.set(el, { opacity: i === 0 ? 1 : 0 });
     });
@@ -648,9 +650,16 @@ const Hero = () => {
     tl.to(ctaTextRef.current, { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out' }, 19);
     tl.to(ctaButtonsRef.current, { opacity: 1, y: 0, duration: 1.5, ease: 'power2.out' }, 19.5);
 
-    // CTA shows centered (position 21). Footer + lift start at 22 so user sees CTA centered first.
-    tl.to(footerRef.current, { opacity: 1, y: 0, duration: 2, ease: 'power2.out' }, 22);
-    tl.to(ctaRef.current, { y: -(footerH / 2 + 32), duration: 2, ease: 'power2.out' }, 22);
+    // Phase 1: panel slides 1vh — CTA exits top, WaitlistSection arrives at viewport top
+    const vh = window.innerHeight;
+    const endH = endContentRef.current ? endContentRef.current.offsetHeight : 700;
+    tl.to(heroEndPanelRef.current, { y: -vh, duration: 1.5, ease: 'power2.out' }, 22);
+
+    // Phase 2: if WaitlistSection + Footer exceed the viewport, keep sliding to reveal footer bottom
+    const extraSlide = Math.max(0, endH - vh);
+    if (extraSlide > 0) {
+      tl.to(heroEndPanelRef.current, { y: -(vh + extraSlide), duration: 1.5, ease: 'power1.inOut' }, 23.5);
+    }
 
     // End pad
     tl.to({}, { duration: 1 }, 25);
@@ -688,21 +697,10 @@ const Hero = () => {
       trigger: hero,
       start: '+=580%',
       onEnter: () => {
-        if (ctaRef.current) ctaRef.current.style.pointerEvents = 'auto';
+        if (heroEndPanelRef.current) heroEndPanelRef.current.style.pointerEvents = 'auto';
       },
       onLeaveBack: () => {
-        if (ctaRef.current) ctaRef.current.style.pointerEvents = 'none';
-      }
-    });
-
-    const footerTrigger = ScrollTrigger.create({
-      trigger: hero,
-      start: '+=700%',
-      onEnter: () => {
-        if (footerRef.current) footerRef.current.style.pointerEvents = 'auto';
-      },
-      onLeaveBack: () => {
-        if (footerRef.current) footerRef.current.style.pointerEvents = 'none';
+        if (heroEndPanelRef.current) heroEndPanelRef.current.style.pointerEvents = 'none';
       }
     });
 
@@ -724,7 +722,6 @@ const Hero = () => {
       cardsTrigger.kill();
       showcaseTrigger.kill();
       ctaTrigger.kill();
-      footerTrigger.kill();
       if (enableFullMotion) {
         document.removeEventListener('mousemove', onParallax);
       }
@@ -1232,12 +1229,17 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* CTA Download Section — animated in after AppShowcase */}
+        {/* Hero end panel — CTA (100svh) + WaitlistSection + Footer stacked vertically.
+            GSAP slides panel up 100svh so CTA exits top as WaitlistSection rises in. */}
+        <div
+          ref={heroEndPanelRef}
+          className="hero-end-panel"
+          style={{ order: useColumnLayout ? 4 : undefined }}
+        >
         <div
           id="cta"
           ref={ctaRef}
           className={`cta-download-section${useColumnLayout ? ' mobile-full-screen' : ''}`}
-          style={{ order: useColumnLayout ? 4 : undefined }}
         >
 
           {/* Animated logo with orbital rings */}
@@ -1313,14 +1315,13 @@ const Hero = () => {
 
         </div>
 
-        {/* Footer — animated in after CTA on desktop; stacked on mobile */}
-        <div
-          ref={footerRef}
-          className="footer-in-hero"
-          style={{ order: useColumnLayout ? 5 : undefined }}
-        >
-          <Footer />
+        <div ref={endContentRef} className="end-content-in-hero">
+          <WaitlistSection />
+          <div className="footer-in-hero">
+            <Footer />
+          </div>
         </div>
+        </div>{/* /hero-end-panel */}
 
         {/* Scroll indicator — full/reduced desktop only (static uses the one inside the spacer) */}
         {!isMobile && !isStaticDesktop && (

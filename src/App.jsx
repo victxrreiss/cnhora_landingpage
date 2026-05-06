@@ -54,7 +54,6 @@ function App() {
             <ErrorBoundary>
               <main>
                 <Hero />
-                <WaitlistSection />
               </main>
             </ErrorBoundary>
           }

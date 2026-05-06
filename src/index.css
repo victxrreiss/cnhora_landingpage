@@ -52,15 +52,18 @@ body {
     scroll-behavior: auto !important;
   }
 
-  /* Orbital rings are brand-identity elements, not decorative motion — keep them spinning
-     regardless of OS reduced-motion preference. Restore duration and iteration-count that
-     the wildcard above overrides for all three ring variants. */
+  /* Orbital rings and scroll indicator are brand/UX-critical — restore the animations
+     that the wildcard above kills via !important. */
   .orbital-ring {
     animation-iteration-count: infinite !important;
   }
   .ring-1 { animation-duration: 8s !important; }
   .ring-2 { animation-duration: 12s !important; }
   .ring-3 { animation-duration: 18s !important; }
+  .scroll-wheel {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
+  }
 }
 
 @layer components {
@@ -2552,12 +2555,16 @@ html.perf-static .hero-vertical-flow .cta-download-section {
   padding: clamp(3rem, 7vw, 5rem) 2rem;
 }
 
-.hero-static-desktop .footer-in-hero {
+.hero-static-desktop .hero-end-panel {
   position: relative !important;
-  bottom: auto !important;
+  top: auto !important;
   left: auto !important;
   right: auto !important;
   pointer-events: auto !important;
+}
+
+.hero-static-desktop .hero-end-panel .cta-download-section {
+  height: auto !important;
 }
 
 /* html.perf-static specificity overrides — beat html.perf-static rules (0-2-1) that force mobile layout */
@@ -2663,12 +2670,16 @@ html.perf-static .hero-static-desktop .cta-download-section {
   align-items: center !important;
 }
 
-html.perf-static .hero-static-desktop .footer-in-hero {
+html.perf-static .hero-static-desktop .hero-end-panel {
   position: relative !important;
-  bottom: auto !important;
+  top: auto !important;
   left: auto !important;
   right: auto !important;
   pointer-events: auto !important;
+}
+
+html.perf-static .hero-static-desktop .hero-end-panel .cta-download-section {
+  height: auto !important;
 }
 
 html.perf-static .hero-static-desktop .hero-cards-container {
@@ -2689,14 +2700,52 @@ html.perf-static .hero-static-desktop .hero-feature-card {
   min-height: 400px !important;
 }
 
-/* ===== FOOTER IN HERO (desktop: absolute overlay; mobile: stacked) ===== */
+/* ===== HERO END PANEL (CTA + WaitlistSection + Footer stacked; GSAP slides up 100svh) ===== */
 
-.footer-in-hero {
+.hero-end-panel {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
-  z-index: 15;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* CTA inside the panel fills the full viewport, then end-content flows below */
+.hero-end-panel .cta-download-section {
+  position: relative;
+  inset: unset;
+  height: 100svh;
+}
+
+/* WaitlistSection inside the panel fills the viewport so footer only appears on further scroll */
+.hero-end-panel .waitlist-section {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-vertical-flow .hero-end-panel .waitlist-section {
+  min-height: auto !important;
+  display: block !important;
+}
+
+/* WaitlistSection + Footer — natural flow below CTA inside the panel */
+.end-content-in-hero {
+  position: relative;
+  pointer-events: none;
+}
+
+.end-content-in-hero > * {
+  pointer-events: auto;
+}
+
+/* ===== FOOTER IN HERO (nested inside end-content-in-hero; flows normally) ===== */
+
+.footer-in-hero {
+  position: relative;
   pointer-events: none;
 }
 
@@ -2721,13 +2770,17 @@ html.perf-static .hero-static-desktop .hero-feature-card {
   padding-bottom: 0.75rem;
 }
 
-.hero-vertical-flow .footer-in-hero {
+.hero-vertical-flow .hero-end-panel {
   position: relative !important;
-  bottom: auto !important;
+  top: auto !important;
   left: auto !important;
   right: auto !important;
   display: block !important;
   pointer-events: auto !important;
+}
+
+.hero-vertical-flow .hero-end-panel .cta-download-section {
+  height: auto !important;
 }
 
 /* ===== FOOTER + LEGAL MODAL ===== */

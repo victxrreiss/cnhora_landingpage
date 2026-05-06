@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
-// ← Replace with CNHora's real WhatsApp number (digits only, with country code)
 const WHATSAPP_NUMBER = '554191057535';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
-const DEFAULT_BOTTOM = 32; // px — normal resting position
-const FOOTER_GAP = 20;     // px gap between sign bottom edge and footer top edge
-const OBSERVER_LOOKAHEAD = '80px';
+const DEFAULT_BOTTOM = 32; // px — resting position
+const FOOTER_GAP = 20;     // px gap between button bottom edge and footer top
 
 const WhatsAppIcon = () => (
   <svg
@@ -22,46 +20,39 @@ const WhatsAppIcon = () => (
 );
 
 const WhatsAppSign = () => {
-  const [bottomOffset, setBottomOffset] = useState(DEFAULT_BOTTOM);
-  const observerRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   useEffect(() => {
     const footer = document.querySelector('.site-footer');
     if (!footer) return;
 
-    const setup = () => {
-      if (observerRef.current) observerRef.current.disconnect();
+    let rafId;
 
-      const footerHeight = footer.offsetHeight;
-      const pushedBottom = footerHeight + FOOTER_GAP;
-
-      observerRef.current = new IntersectionObserver(
-        ([entry]) => {
-          setBottomOffset(entry.isIntersecting ? pushedBottom : DEFAULT_BOTTOM);
-        },
-        {
-          rootMargin: `0px 0px ${OBSERVER_LOOKAHEAD} 0px`,
-          threshold: 0,
-        }
-      );
-
-      observerRef.current.observe(footer);
+    // Poll every animation frame — GSAP scrub lerps the panel transform on each
+    // RAF tick, so scroll events alone miss intermediate frames. Reading
+    // getBoundingClientRect() here always reflects the current post-transform position.
+    const loop = () => {
+      if (wrapperRef.current) {
+        const rect = footer.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const bottom =
+          rect.top < vh
+            ? Math.max(DEFAULT_BOTTOM, vh - rect.top + FOOTER_GAP)
+            : DEFAULT_BOTTOM;
+        wrapperRef.current.style.bottom = bottom + 'px';
+      }
+      rafId = requestAnimationFrame(loop);
     };
 
-    setup();
-
-    window.addEventListener('resize', setup, { passive: true });
-
-    return () => {
-      if (observerRef.current) observerRef.current.disconnect();
-      window.removeEventListener('resize', setup);
-    };
+    rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   return (
     <div
+      ref={wrapperRef}
       className="whatsapp-sign-wrapper"
-      style={{ bottom: bottomOffset + 'px' }}
+      style={{ bottom: DEFAULT_BOTTOM + 'px' }}
     >
       <motion.div
         animate={{ y: [0, -5, 0] }}
